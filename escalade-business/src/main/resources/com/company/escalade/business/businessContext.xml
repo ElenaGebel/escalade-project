@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- ===== Managers declaration ===== -->
+    <bean id="userManager" class="com.company.business.impl.managers.UserManagerImpl"/> 
+     <!-- ===== ManagerFactory ===== -->
+    <bean id="managerFactory" class="com.company.business.impl.ManagerFactoryImpl"> 
+        <property name="userManager" ref="userManager" />
+    </bean>
+     <!-- ==== AbstractManager ===== -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetClass" value="com.company.business.impl.AbstractManager"/>
+        <property name="targetMethod" value="setDaoFactory"/>
+        <property name="arguments" ref="daoFactory"/>
+    </bean>   
+ </beans>
