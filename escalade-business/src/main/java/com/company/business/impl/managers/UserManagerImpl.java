@@ -2,6 +2,9 @@ package com.company.business.impl.managers;
 
 import com.company.business.impl.AbstractManager;
 import com.company.model.bean.User;
+
+import java.util.List;
+
 import com.company.business.contract.managers.UserManager;
 
 public class UserManagerImpl extends AbstractManager implements UserManager{
@@ -20,6 +23,10 @@ public class UserManagerImpl extends AbstractManager implements UserManager{
 	
 	public void logIn(User user) {
 		getDaoFactory().getUserDao().logIn(user);
+	}
+	
+	public List<User> getListUsers(){
+		return getDaoFactory().getUserDao().getListUsers();
 	}
 	
 

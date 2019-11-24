@@ -7,17 +7,17 @@
     <body>
 
     <form method="post" action="inscription" >
-        <div class="form-group">
+        <div >
             <label for="nickname">Nickname :</label>
             <div>
-                <input type="text" class="form-control" name="nickname" id="nickname" placeholder="Enter nickname"/>
+                <input type="text" name="nickname" id="nickname" placeholder="Enter nickname"/>
             </div>
         </div>
 
-        <div class="form-group">
+        <div >
             <label  for="email">Email :</label>
             <div>
-                <input type="email" class="form-control" name="email" id="email" placeholder="Enter email"/>
+                <input type="email" name="email" id="email" placeholder="Enter email"/>
             </div>
         </div>
 
@@ -30,10 +30,14 @@
 
         <div >
             <div >
-                <button type="submit" ><span ></span> Inscription</button>
+                <button type="submit" > Inscription</button>
             </div>
         </div>
     </form>
-    
+        <ul>
+        <c:forEach var="user" items="${users}"> 
+           <li><c:out value="${user.getNickname()} "></c:out><c:out value="${user.getEmail()} "></c:out><c:out value="${user.getRole()}"></c:out></li>
+        </c:forEach>
+    </ul>
     </body>
 </html>

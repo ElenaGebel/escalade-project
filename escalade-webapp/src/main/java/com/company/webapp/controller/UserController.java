@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 @Controller
@@ -23,6 +25,11 @@ public class UserController extends AbstractController{
 
     @GetMapping("/")
     public String inscription(HttpServletRequest request) {
+        List<User> users = userManager.getListUsers();
+
+        HttpSession session = request.getSession();
+        session.setAttribute("users", users);
+
     	return "inscription";
     }
 
@@ -32,13 +39,13 @@ public class UserController extends AbstractController{
         user.setNickname(request.getParameter("nickname"));
         user.setEmail(request.getParameter("email"));
         user.setPassword(request.getParameter("password"));
-        	        
+        
         userManager.registerUser(user);
 
-        //User userQuery = userManager.logIn(user);
-
-        //HttpSession session = request.getSession();
-        //session.setAttribute("user", userQuery);
+        List<User> users = userManager.getListUsers();
+    
+        HttpSession session = request.getSession();
+        session.setAttribute("users", users);
         return "inscription";
     }
 

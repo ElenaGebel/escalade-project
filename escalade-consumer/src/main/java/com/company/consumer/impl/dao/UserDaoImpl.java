@@ -2,6 +2,12 @@ package com.company.consumer.impl.dao;
 
 
 import java.sql.Types;
+import java.util.List;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import org.springframework.jdbc.core.RowMapper;
+
 
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -26,6 +32,25 @@ public class UserDaoImpl extends AbstractDao implements UserDao{
 
         getNamedParameterJdbcTemplate().update(sql, params);
 
+	}
+	
+	public List<User> getListUsers() {
+		String sql = "SELECT * FROM users";
+
+        RowMapper<User> rowMapper = new RowMapper<User>() {
+            public User mapRow(ResultSet pRS, int pRowNum) throws SQLException {
+            	User user = new User();
+            	user.setNickname(pRS.getString("nickname"));
+            	user.setEmail(pRS.getString("email"));
+            	user.setPassword(pRS.getString("password"));
+            	user.setRole(pRS.getString("role"));
+                return user;
+            }
+        };
+
+        List<User> users = getJdbcTemplate().query(sql, rowMapper);
+
+        return users;
 	}
 	
 	public void deleteUser(User user) {
