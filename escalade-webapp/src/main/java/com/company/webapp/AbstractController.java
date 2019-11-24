@@ -1,8 +1,10 @@
 package com.company.webapp;
 
+
+
 import com.company.business.contract.ManagerFactory;
 
-public abstract class AbstractManager {
+public abstract class AbstractController{
 	private static ManagerFactory managerFactory;
 	
 	public static ManagerFactory getManagerFactory() {
@@ -10,7 +12,7 @@ public abstract class AbstractManager {
 	}
 
 	public static void setManagerFactory(ManagerFactory managerFactory) {
-		AbstractManager.managerFactory = managerFactory;
+		AbstractController.managerFactory = managerFactory;
 	}
 
 

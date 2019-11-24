@@ -16,7 +16,14 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
-  
+        <dependency>
+            <groupId>com.company</groupId>
+            <artifactId>escalade-consumer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.company</groupId>
+            <artifactId>escalade-model</artifactId>
+        </dependency>
         <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
