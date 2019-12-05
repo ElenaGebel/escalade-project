@@ -7,9 +7,11 @@
 
     <!-- ===== Managers declaration ===== -->
     <bean id="userManager" class="com.company.business.impl.managers.UserManagerImpl"/> 
+    <bean id="spotManager" class="com.company.business.impl.managers.SpotManagerImpl"/> 
      <!-- ===== ManagerFactory ===== -->
     <bean id="managerFactory" class="com.company.business.impl.ManagerFactoryImpl"> 
         <property name="userManager" ref="userManager" />
+         <property name="spotManager" ref="spotManager" />
     </bean>
      <!-- ==== AbstractManager ===== -->
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">

@@ -2,7 +2,7 @@ package com.company.model.bean;
 
 public class User {
 	private int id;
-	private String nickname; 
+	private String pseudo; 
 	private String email;
 	private String password;
 	private String role = "user";
@@ -13,11 +13,11 @@ public class User {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getNickname() {
-		return nickname;
+	public String getPseudo() {
+		return pseudo;
 	}
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
+	public void setPseudo(String pseudo) {
+		this.pseudo = pseudo;
 	}
 	public String getEmail() {
 		return email;

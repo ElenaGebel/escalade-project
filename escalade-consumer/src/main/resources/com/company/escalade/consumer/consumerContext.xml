@@ -7,10 +7,12 @@
 
     <!-- ===== Dao declaration ===== -->
     <bean id="userDao" class="com.company.consumer.impl.dao.UserDaoImpl"/>
+     <bean id="spotDao" class="com.company.consumer.impl.dao.SpotDaoImpl"/>
 
     <!-- ===== DaoFactory ===== -->
     <bean id="daoFactory" class="com.company.consumer.impl.DaoFactoryImpl">       
         <property name="userDao" ref="userDao"/>      
+        <property name="spotDao" ref="spotDao"/>  
     </bean>
 
     <!-- ==== AbstractDao ===== -->

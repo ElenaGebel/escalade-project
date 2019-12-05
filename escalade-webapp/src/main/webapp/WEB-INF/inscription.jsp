@@ -1,43 +1,52 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <title>Test</title>
-    </head>
-    <body>
+<head>
+     <%@ include file="include/html_head_libs.jsp" %>
+    <title>${application.name} - Inscription</title>
+</head>
+<body>
 
-    <form method="post" action="inscription" >
-        <div >
-            <label for="nickname">Nickname :</label>
-            <div>
-                <input type="text" name="nickname" id="nickname" placeholder="Enter nickname"/>
+<%@ include file="include/menu.jsp" %>
+
+<div class="container">
+    <h1>Inscription</h1>
+    <c:if test="${ !empty sessionScope.reponse }">
+    <div class="alert alert-warning alert-dismissable col-lg-4">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Attention!</strong>${ sessionScope.reponse.message }
+    </div>
+    </c:if>
+    <form method="post" action="inscription" class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="pseudo">Pseudo :</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="pseudo" id="pseudo" placeholder="Veuillez saisir un pseudo"/>
             </div>
         </div>
 
-        <div >
-            <label  for="email">Email :</label>
-            <div>
-                <input type="email" name="email" id="email" placeholder="Enter email"/>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="email">Email :</label>
+            <div class="col-sm-10">
+                <input type="email" class="form-control" name="email" id="email" placeholder="Veuillez saisir un email"/>
             </div>
         </div>
 
-        <div >
-            <label for="password">Mot de passe :</label>
-            <div >
-                <input type="password"  name="password" id="password" placeholder="Enter password"/>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="password">Mot de passe :</label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control" name="password" id="password" placeholder="Veuillez saisir un password"/>
             </div>
         </div>
 
-        <div >
-            <div >
-                <button type="submit" > Inscription</button>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Inscription</button>
             </div>
         </div>
     </form>
-        <ul>
-        <c:forEach var="user" items="${users}"> 
-           <li><c:out value="${user.getNickname()} "></c:out><c:out value="${user.getEmail()} "></c:out><c:out value="${user.getRole()}"></c:out></li>
-        </c:forEach>
-    </ul>
-    </body>
+</div>
+
+
+<%@ include file="include/footer.jsp" %>
+
+</body>
 </html>

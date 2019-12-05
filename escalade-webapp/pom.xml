@@ -18,7 +18,7 @@
     <!-- Properties -->
     <!-- =============================================================== -->
     <properties>
-        <application.name>Les Amis de l’escalade</application.name>
+        <application.name>Les Amis de l'escalade</application.name>
     </properties>
   
    <dependencies>
