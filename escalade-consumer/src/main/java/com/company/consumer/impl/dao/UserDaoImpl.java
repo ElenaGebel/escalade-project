@@ -83,14 +83,10 @@ public class UserDaoImpl extends AbstractDao implements UserDao{
     }
 
     public Reponse deleteUser(User user) {
-        String sql = "UPDATE publication SET user_account_id = :user_robot WHERE user_account_id = :user_id;" +
-                "UPDATE comment SET user_account_id = :user_robot WHERE user_account_id = :user_id;" +
-                "DELETE FROM user_has_topo WHERE user_id = :user_id;" +
-                "DELETE FROM user_account WHERE user_account.id = :user_id;";
+        String sql = "DELETE FROM user_account WHERE user_account.id = :user_id;";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue("user_id", user.getId(), Types.INTEGER);
-        args.addValue("user_robot", 0, Types.INTEGER);
 
         Reponse reponse;
         try {

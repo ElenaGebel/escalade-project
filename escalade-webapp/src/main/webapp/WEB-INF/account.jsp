@@ -10,9 +10,15 @@
 
 <div class="container">
     <h1>Mon compte</h1>
+    <c:if test="${ !empty sessionScope.reponse }">
+        <div class="alert alert-warning alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Attention! </strong>${ sessionScope.reponse.message }
+        </div>
+    </c:if>
 
     <c:if test="${ !empty sessionScope.user }">
-        <form method="post" action="/account/${ sessionScope.user.id }" class="form-horizontal">
+        <form method="post" action="account" class="form-horizontal">
             <div class="form-group">
                 <label class="control-label col-sm-2" for="pseudo">Pseudo :</label>
                 <div class="col-sm-10">
@@ -48,7 +54,7 @@
             </div>
         </form>
 
-        <form method="post" action="/account/delete">
+        <form method="post" action="account/delete">
             <button type="submit" class="btn btn-danger btn-xs">
                 <span class="glyphicon glyphicon-remove"></span> Supprimer le compte
             </button>

@@ -61,6 +61,10 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+        </dependency>  
     </dependencies>
   <build>
     <finalName>escalade-webapp</finalName>

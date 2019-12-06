@@ -9,7 +9,12 @@
 
 <div class="container">
     <h1>Connexion</h1>
-
+    <c:if test="${ !empty sessionScope.reponse }">
+        <div class="alert alert-warning alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Attention! </strong>${ sessionScope.reponse.message }
+        </div>
+    </c:if>
     <form method="post" action="login" class="form-horizontal">
         <div class="form-group">
             <label class="control-label col-sm-2" for="email">Email :</label>

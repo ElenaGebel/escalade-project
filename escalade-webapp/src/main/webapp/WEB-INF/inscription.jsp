@@ -10,9 +10,9 @@
 <div class="container">
     <h1>Inscription</h1>
     <c:if test="${ !empty sessionScope.reponse }">
-    <div class="alert alert-warning alert-dismissable col-lg-4">
+    <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Attention!</strong>${ sessionScope.reponse.message }
+        <strong>Attention! </strong>${ sessionScope.reponse.message }
     </div>
     </c:if>
     <form method="post" action="inscription" class="form-horizontal">
