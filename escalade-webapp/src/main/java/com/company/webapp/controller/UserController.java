@@ -95,7 +95,7 @@ public class UserController extends AbstractController{
             return "redirect:/";
         }
         session.invalidate();
-        return "/login";
+        return "login";
     }
 
     @PostMapping("/login")
@@ -124,7 +124,7 @@ public class UserController extends AbstractController{
         	session.setAttribute("reponse", new Reponse(true, "Login ou password incorrect."));
         }
 
-        return "redirect:/login";
+        return "login";
     }
     
     @GetMapping("/logout")
@@ -140,6 +140,7 @@ public class UserController extends AbstractController{
         if (session.getAttribute("user") == null) {
             return "redirect:/login";
         }
+        session.setAttribute("reponse", null);
         return "account";
     }
 
@@ -147,6 +148,8 @@ public class UserController extends AbstractController{
     public String updateUser(ModelMap modelMap, RedirectAttributes redirectAttributes, HttpServletRequest request) throws IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
+        
+        
         System.out.println("user="+ user.getPassword());
         System.out.println("request.getParameter(\"last_password\")="+ request.getParameter("last_password"));
         System.out.println("request.getParameter(\"new_password\")="+ request.getParameter("new_password"));
@@ -162,26 +165,27 @@ public class UserController extends AbstractController{
         	reponse = new Reponse(true, "Adress email pas valide");
         	
         }else {
-        	reponse =  userManager.updateUser(user);
-    	    if(!reponse.getIsError()) {
-                user.setPseudo(request.getParameter("pseudo"));
+        	
+        	if (BCrypt.checkpw(request.getParameter("last_password"), user.getPassword())) {
+        		
+        		user.setPseudo(request.getParameter("pseudo"));
                 user.setEmail(request.getParameter("email"));
                 user.setPassword(request.getParameter("new_password"));
-    	     }  
-        	
-        /*	if (BCrypt.checkpw(request.getParameter("last_password"), user.getPassword())) {
-        	    reponse =  userManager.updateUser(user);
-        	    if(!reponse.getIsError()) {
-                    user.setPseudo(request.getParameter("pseudo"));
-                    user.setEmail(request.getParameter("email"));
-                    user.setPassword(request.getParameter("new_password"));
-        	     }       		
+                User updatedUser = userManager.updateUser(user);
+                if(updatedUser!= null) {
+                	session.setAttribute("user", updatedUser); 
+                	reponse = new Reponse(true, "User update success"); 
+                }
+                else {
+                	reponse = new Reponse(true, "User update failed");  
+                }
+                        		
         	}else 
-        	    reponse = new Reponse(true, "Mauvais mot de passe !");   */   
+        	    reponse = new Reponse(true, "Mauvais mot de passe !");     
         }
         session.setAttribute("reponse", reponse);
 
-        return "redirect:/account";
+        return "account";
     }
 
     @PostMapping("/account/delete")

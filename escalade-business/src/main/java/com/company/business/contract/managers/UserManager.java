@@ -8,7 +8,7 @@ public interface UserManager {
 	
 	Reponse registerUser(User user);
 	Reponse deleteUser(User user);
-	Reponse updateUser(User user);
+	User updateUser(User user);
 	User logIn(User user);
 	List<User> getListUsers();
 

@@ -1,11 +1,22 @@
 package com.company.model.bean;
 
+import java.util.Date;
+
 public class User {
 	private int id;
 	private String pseudo; 
 	private String email;
 	private String password;
 	private String role = "user";
+	private Date date;
+	
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 	
 	public int getId() {
 		return id;

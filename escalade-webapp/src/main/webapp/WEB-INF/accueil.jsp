@@ -5,31 +5,30 @@
     <title>${application.name}</title>
 </head>
 <body>
-<%@ include file="include/menu.jsp" %>
-<div class="col-md-10 col-md-offset-1">
 
-      <div  class="card-group">
-           <c:forEach var="spot" items="${spots}" >
-               <div class="card text-white "  id="bloc">   
-               <div class="card-header "></p></div>            
-                <div class="card-body" style="display: flex;">
-                    <div id="divImage" class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <img src="${ spot.image }" width="100%" height="100%" id="img"  />
-                    </div>
-                    <div id="divInfos" class="col-lg-8 col-md-8 col-sm-8">
-                         <h1>${ spot.name }</h1>
+<%@ include file="include/menu.jsp" %>
+
+<div class="container">
+<br><br>
+<div class="jumbotron text-center">
+  <h1>Nos meilleur sites</h1>
+  <p>Petit tour d'horizon des meilleurs sites d'escalade: une selection pour les aventuriers !</p>
+</div>
+ <div class="card-columns">
+           <c:forEach var="spot" items="${spots}" >   
+           <div class="card">        
+                <div class="card-body" >
+                    <img src="${ spot.image }" width="80%" id="img"  />
+                    <h1>${ spot.name }</h1>
                          <p>${ spot.description }</p>
                          <a class="btn btn-primary btn-lg" href="#" role="button">En savoir plus</a>
-                    </div>
-                   
                 </div>
-            </div>
-
+             </div> 
+             <br>
             </c:forEach>
 
-  </div>  
-      
-      </div>
+  </div>
+ </div>
 
 <%@ include file="include/footer.jsp" %>
 </body>
