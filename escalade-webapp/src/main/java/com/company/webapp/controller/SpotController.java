@@ -23,30 +23,20 @@ public class SpotController extends AbstractController{
 	private SpotManager spotManager = getManagerFactory().getSpotManager();
        
 
-    @GetMapping("/spot")
-    public String inscription(HttpServletRequest request) {
+    @GetMapping("/sites")
+    public String showSites(HttpServletRequest request) {
         List<Spot> spots = spotManager.getListSpots();
 
         HttpSession session = request.getSession();
         session.setAttribute("spots", spots);
 
-    	return "spot";
+    	return "sites";
     }
 
-    @PostMapping("/spot")
+    @PostMapping("/sites")
     public String addUser(HttpServletRequest request) {
-	   /* User user = new User();
-        user.setNickname(request.getParameter("nickname"));
-        user.setEmail(request.getParameter("email"));
-        user.setPassword(request.getParameter("password"));
-        
-        userManager.registerUser(user);
 
-        List<User> users = userManager.getListUsers();
-    
-        HttpSession session = request.getSession();
-        session.setAttribute("users", users);*/
-        return "spot";
+        return "sites";
     }
 
 

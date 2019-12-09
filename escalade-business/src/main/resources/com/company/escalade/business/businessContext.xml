@@ -8,10 +8,12 @@
     <!-- ===== Managers declaration ===== -->
     <bean id="userManager" class="com.company.business.impl.managers.UserManagerImpl"/> 
     <bean id="spotManager" class="com.company.business.impl.managers.SpotManagerImpl"/> 
+    <bean id="topoManager" class="com.company.business.impl.managers.TopoManagerImpl"/> 
      <!-- ===== ManagerFactory ===== -->
     <bean id="managerFactory" class="com.company.business.impl.ManagerFactoryImpl"> 
         <property name="userManager" ref="userManager" />
-         <property name="spotManager" ref="spotManager" />
+        <property name="spotManager" ref="spotManager" />
+        <property name="topoManager" ref="topoManager" />
     </bean>
      <!-- ==== AbstractManager ===== -->
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">

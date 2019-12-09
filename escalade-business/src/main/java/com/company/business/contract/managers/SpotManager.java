@@ -5,9 +5,9 @@ import com.company.model.bean.Spot;
 
 public interface SpotManager {
 	
-	void registerSpot(Spot user);
-	void deleteSpot(Spot user);
-	void updateSpot(Spot user);
+	void registerSpot(Spot spot);
+	void deleteSpot(Spot spot);
+	void updateSpot(Spot spot);
 	List<Spot> getListSpots();
 
 }
