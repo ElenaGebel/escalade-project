@@ -19,7 +19,7 @@
            <div class="card">        
                 <div class="card-body" >
                     <img src="${ spot.image }" width="80%" id="img"  />
-                    <h1>${ spot.name }</h1>
+                     <a href="${pageContext.request.contextPath}/spot/${ spot.id }"><h1><c:out value="${ spot.name }" /></h1></a>
                          <p>${ spot.description }</p>
                          <a class="btn btn-primary btn-lg" href="#" role="button">En savoir plus</a>
                 </div>

@@ -9,12 +9,20 @@
     <bean id="userDao" class="com.company.consumer.impl.dao.UserDaoImpl"/>
      <bean id="spotDao" class="com.company.consumer.impl.dao.SpotDaoImpl"/>
      <bean id="topoDao" class="com.company.consumer.impl.dao.TopoDaoImpl"/>
+     
+    <bean id="commentDao" class="com.company.consumer.impl.dao.CommentDaoImpl"/>
+    <bean id="routeDao" class="com.company.consumer.impl.dao.RouteDaoImpl"/>
+    <bean id="sectorDao" class="com.company.consumer.impl.dao.SectorDaoImpl"/>
 
     <!-- ===== DaoFactory ===== -->
     <bean id="daoFactory" class="com.company.consumer.impl.DaoFactoryImpl">       
         <property name="userDao" ref="userDao"/>      
         <property name="spotDao" ref="spotDao"/>  
         <property name="topoDao" ref="topoDao"/> 
+        
+        <property name="commentDao" ref="commentDao"/>      
+        <property name="routeDao" ref="routeDao"/>  
+        <property name="sectorDao" ref="sectorDao"/> 
     </bean>
 
     <!-- ==== AbstractDao ===== -->

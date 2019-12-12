@@ -9,5 +9,6 @@ public interface TopoManager {
 	void deleteTopo(Topo topo);
 	void updateTopo(Topo topo);
 	List<Topo> getListTopos();
+	List<Topo> listForSearch(Topo topo);
 
 }

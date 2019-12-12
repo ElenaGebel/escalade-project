@@ -9,11 +9,19 @@
     <bean id="userManager" class="com.company.business.impl.managers.UserManagerImpl"/> 
     <bean id="spotManager" class="com.company.business.impl.managers.SpotManagerImpl"/> 
     <bean id="topoManager" class="com.company.business.impl.managers.TopoManagerImpl"/> 
+    
+    <bean id="sectorManager" class="com.company.business.impl.managers.SectorManagerImpl"/> 
+    <bean id="commentManager" class="com.company.business.impl.managers.CommentManagerImpl"/> 
+    <bean id="routeManager" class="com.company.business.impl.managers.RouteManagerImpl"/> 
      <!-- ===== ManagerFactory ===== -->
     <bean id="managerFactory" class="com.company.business.impl.ManagerFactoryImpl"> 
         <property name="userManager" ref="userManager" />
         <property name="spotManager" ref="spotManager" />
         <property name="topoManager" ref="topoManager" />
+        
+        <property name="sectorManager" ref="sectorManager" />
+        <property name="commentManager" ref="commentManager" />
+        <property name="routeManager" ref="routeManager" />
     </bean>
      <!-- ==== AbstractManager ===== -->
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">

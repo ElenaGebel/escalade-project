@@ -11,10 +11,10 @@
           <a class="nav-link" href="${pageContext.request.contextPath}/">Accueil<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/sites">Les Sites</a>
+          <a class="nav-link" href="${pageContext.request.contextPath}/spot">Les Sites</a>
       </li>
       <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/topos">Les Topos</a>
+          <a class="nav-link" href="${pageContext.request.contextPath}/topo">Les Topos</a>
       </li>
       <li class="nav-item">
           <a class="nav-link" href="${pageContext.request.contextPath}/search">Recherche</a>
