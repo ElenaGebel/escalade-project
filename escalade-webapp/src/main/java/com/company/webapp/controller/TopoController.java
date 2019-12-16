@@ -32,6 +32,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -51,101 +52,77 @@ public class TopoController extends AbstractController{
         modelMap.addAttribute("topos",  topoManager.getListTopos());
         return new ModelAndView("topo", "topo", new Topo());
     }
-    
+
     @PostMapping("/topo")
-    public String addTopo(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException  {
-    	Topo topo = new Topo();
+    public String addTopo(@ModelAttribute Topo topo, @RequestParam MultipartFile file, HttpServletRequest request) throws IOException  {
    	
     	HttpSession session = request.getSession();
     	User user = (User) session.getAttribute("user");
 
         topo.setUserId(user.getId());
-        topo.setName(request.getParameter("name"));
-        topo.setDescription(request.getParameter("description"));
           
         topo.setDate(new Date());
         
         topo.setId(topoManager.registerTopo(topo));
 
-        if (!file.isEmpty()) {
-            byte[] bytes = file.getBytes();
+        ServletContext context = request.getServletContext();
 
-            // Creating the directory to store file
-            ServletContext context = request.getServletContext();
-            String path = context.getRealPath("/image/topo");
-            
-            File dir = new File(path);
-            if (!dir.exists())
-                dir.mkdirs();
-
-            File serverFile = new File(dir.getAbsolutePath() + File.separator + "topo-" + topo.getId() + ".jpg");
-           
-            BufferedOutputStream stream;
-			try {
-				stream = new BufferedOutputStream(
-				        new FileOutputStream(serverFile));
-	            stream.write(bytes);
-	            stream.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-
-            topo.setImage("image/topo/" + serverFile.getName());
-        } else {
-            topo.setImage("");
-        }
+        String fileName =  "topo" + topo.getId() + "-" + UUID.randomUUID().toString() + ".jpg";
+        
+        if(uploadImage(file, context.getRealPath("/image/topo"), fileName))
+        	topo.setImage("image/topo/" + fileName);
+        else
+        	topo.setImage(request.getParameter("currentPicture"));
 
         topoManager.updateTopo(topo);
         
-        List<Topo> topos = topoManager.getListTopos();
-
-        session.setAttribute("topos", topos);
-        
-        return "topo";
+        return "redirect:/topo";
     }
     
 
     @PostMapping("/topo/{topoId}/update")
-    public String updateTopo(@ModelAttribute Topo topo, @PathVariable String topoId, @RequestParam String description, @RequestParam MultipartFile file, @RequestParam String currentPicture, HttpServletRequest request) throws IOException {
-        topo.setId(Integer.parseInt(topoId));
-        topo.setDescription(description);
+    public String updateTopo(@PathVariable String topoId, @RequestParam MultipartFile file, HttpServletRequest request) throws IOException {
+        
+    	Topo topo = new Topo();
+    	
+    	HttpSession session = request.getSession();
+    	User user = (User) session.getAttribute("user");
 
-        if (!file.isEmpty()) {
-            byte[] bytes = file.getBytes();
+        topo.setUserId(user.getId());
 
-            // Creating the directory to store file
-            ServletContext context = request.getServletContext();
-            String path = context.getRealPath("/image/topo");
-            
-            File dir = new File(path);
-            if (!dir.exists())
-                dir.mkdirs();
+    	topo.setName(request.getParameter("name"));
+    	topo.setDescription(request.getParameter("description"));    	
+    	topo.setId(Integer.parseInt(topoId));
+        
+        ServletContext context = request.getServletContext();
 
-            File serverFile = new File(dir.getAbsolutePath() + File.separator + "topo-" + topo.getId() + ".jpg");
-           
-            BufferedOutputStream stream;
-			try {
-				stream = new BufferedOutputStream(
-				        new FileOutputStream(serverFile));
-	            stream.write(bytes);
-	            stream.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-
-            topo.setImage("image/topo/" + serverFile.getName());
-        } else {
-            topo.setImage("");
-        }
+        String fileName =  "topo" + topo.getId() + "-" + UUID.randomUUID().toString() + ".jpg";
+        
+        if(uploadImage(file, context.getRealPath("/image/topo"), fileName))
+        	topo.setImage("image/topo/" + fileName);
+        else
+        	topo.setImage(request.getParameter("currentPicture"));
 
         topoManager.updateTopo(topo);
         
 
         return "redirect:/topo";
+    }
+    
+    public Boolean uploadImage(MultipartFile file, String path, String fileName) throws IOException{
+    	
+        if (!file.isEmpty()) {
+ 
+            File dir = new File(path);
+            if (!dir.exists())
+                dir.mkdirs();
+
+            file.transferTo(new File(dir.getAbsolutePath() + File.separator + fileName));
+
+			return true;
+        } else {
+        	return false;
+        }
     }
 
     @PostMapping("/topo/{topoId}/picture-delete")
@@ -200,18 +177,23 @@ public class TopoController extends AbstractController{
         comment.setTopoId(Integer.parseInt(topoId));
 
         modelMap.addAttribute("currentURI", request.getRequestURI());
+
         modelMap.addAttribute("publicationId", topoId);
-   /*   modelMap.addAttribute("topo", topoManager.getTopo(topo));
+        modelMap.addAttribute("topo", topoManager.getTopo(topo));
+        
+        
         modelMap.addAttribute("notRelatedSpots", topoManager.getNotRelatedSpots(topo));
-        modelMap.addAttribute("topoHasSpots", topoManager.getTopoHasSpot(topo));
-        modelMap.addAttribute("notRelatedUser", topoManager.getNotRelatedUser(topo));
-        modelMap.addAttribute("userHasTopos", topoManager.getUserHasTopo(topo));
+        modelMap.addAttribute("relatedSpots", topoManager.getRelatedSpots(topo));
+        
+      //  modelMap.addAttribute("notRelatedUser", topoManager.getNotRelatedUser(topo));
+       // modelMap.addAttribute("userHasTopos", topoManager.getUserHasTopo(topo));
+        
         modelMap.addAttribute("parentsComments", comments.getParentsComments(comment));
-        modelMap.addAttribute("childrenComments", comments.getChildrenComments(comment));*/
+        modelMap.addAttribute("childrenComments", comments.getChildrenComments(comment));
         return "topo_item";
     }
 
-    @PostMapping("/topo-spot/{topoId}")
+    @PostMapping("/topo/addspot/{topoId}")
     public String addTopoHasSpot(@PathVariable String topoId, @RequestParam int spotId) {
 
         Spot spot = new Spot();
@@ -222,7 +204,7 @@ public class TopoController extends AbstractController{
         return "redirect:/topo/" + topoId;
     }
 
-    @PostMapping("/topo-spot/{spotId}/delete")
+    @PostMapping("/topo/deletespot/{spotId}")
     public String deleteTopoHasSpot(@PathVariable String spotId, @RequestParam int topoId) {
         Spot spot = new Spot();
         spot.setId(Integer.parseInt(spotId));
@@ -232,7 +214,49 @@ public class TopoController extends AbstractController{
         
         return "redirect:/topo/" + topoId;
     }
+/*
+    @PostMapping("/user-topo/{topoId}")
+    public String addUserHasTopo(@PathVariable String topoId, @SessionAttribute UserAccount user) {
+        user.setTopo(new Topo());
+        user.getTopo().setPublicationId(Integer.parseInt(topoId));
 
+        webappToConsumer.addUserHasTopo(user);
+        return "redirect:/topo/" + topoId;
+    }
+
+    @PostMapping("/user-topo/{topoId}/update")
+    public String updateUserHasTopo(@PathVariable String topoId, @SessionAttribute User user, HttpServletRequest request) throws ParseException {
+        user.setId(user.getId());
+        user.setTopo(new Topo());
+        user.getTopo().setPublicationId(Integer.parseInt(topoId));
+
+        if (request.getParameter("loaned") != null) user.getTopo().setLoaned(true);
+        else user.getTopo().setLoaned(false);
+
+        String expectedPattern = "yyyy-MM-dd";
+        SimpleDateFormat formatter = new SimpleDateFormat(expectedPattern);
+        String borrowingDate = request.getParameter("borrowing_date");
+        String returnDate = request.getParameter("return_date");
+
+        if (!borrowingDate.equals("")) user.getTopo().setBorrowingDate(formatter.parse(borrowingDate));
+        else user.getTopo().setBorrowingDate(null);
+        if (!returnDate.equals("")) user.getTopo().setReturnDate(formatter.parse(returnDate));
+        else user.getTopo().setReturnDate(null);
+
+        webappToConsumer.updateUserHasTopo(user);
+        return "redirect:/topo/" + topoId;
+    }
+
+    @PostMapping("/user-topo/{topoId}/delete")
+    public String deleteUserHasTopo(@PathVariable String topoId, @SessionAttribute User user) {
+        user.setId(user.getId());
+        user.setTopo(new Topo());
+        user.getTopo().setPublicationId(Integer.parseInt(topoId));
+
+        webappToConsumer.deleteUserHasTopo(user);
+        return "redirect:/topo/" + topoId;
+    }*/
+    
 
 
 

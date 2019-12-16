@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <%@ include file="include/html_head_libs.jsp" %>
     <title>${application.name} - sites</title>
@@ -18,7 +18,7 @@
     
         <p>
            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-              <span class="glyphicon glyphicon-plus"></span> Ajouter un spot
+              <span class="glyphicon glyphicon-plus"></span> Ajouter un site
           </button>
         </p>
         <div class="collapse" id="collapseExample">
@@ -60,43 +60,38 @@
                          <p>${ spot.description }</p>
                          
                   <c:if test="${ !empty sessionScope.user }">
-                        <c:if test="${ sessionScope.user.role == 'user' }">
+                        <c:if test="${ sessionScope.user.role == 'admin' or sessionScope.user.id == spot.userId}">
                             <form:form method="post" action="spot/${spot.id}/delete" class="publication-delete${ spot.id }" modelAttribute="spot">
                                 <input hidden name="picture" title="picture" value="${ spot.image }" />
                             </form:form>
+	                        <div class="btn-group btn-group-xs">
+	                            <a title="Modify" class="btn btn-primary" data-toggle="modal" data-target=".modal-menu${ spot.id }" data-backdrop="static" data-keyboard="false">
+	                                <span class="glyphicon glyphicon-pencil"></span>
+	                            </a>
+	                            <a title="Delete" class="btn btn-danger" onclick="$('.publication-delete${ spot.id }').submit();">
+	                                <span class="glyphicon glyphicon-remove"></span>
+	                            </a>
+	                        </div>
                         </c:if>
-
-                        <div class="btn-group btn-group-xs">
-                            <a title="Modify" class="btn btn-primary" data-toggle="modal" data-target=".modal-menu${ spot.id }" data-backdrop="static" data-keyboard="false">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </a>
-
-                            <!-- spot DELETE -->
-                            <c:if test="${ sessionScope.user.role == 'user' }">
-                                <a title="Delete" class="btn btn-danger" onclick="$('.publication-delete${ spot.id }').submit();">
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                </a>
-                            </c:if>
-                        </div>
-                </c:if>
+                 </c:if>
 
                 </div>
              </div>
-                        <c:if test="${ !empty sessionScope.user }">
+              <c:if test="${ !empty sessionScope.user }">
                 <div class="modal fade modal-menu${ spot.id }">
                     <div class="modal-dialog">
                         <div class="modal-content">
 
                             <div class="modal-header">
+                                <h4 class="modal-title">Mettre jour</h4>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Mise à jour</h4>
                             </div>
 
                             <div class="modal-body">
-                                <form:form method="post" action="spot/${spot.id}/update" enctype="multipart/form-data" class="form-horizontal publication-update" modelAttribute="spot">
+                                <form method="post" action="spot/${spot.id}/update" enctype="multipart/form-data" class="form-horizontal" >
                                     <div class="form-group">
                                         <label for="name_update">Nom :</label>
-                                        <form:input type="text" class="form-control" path="name" id="name_update" placeholder="Enter a spot name" value="${ spot.name }" />
+                                        <input type="text" class="form-control" name="name" id="name_update" placeholder="Enter a spot name" value="${ spot.name }" />
                                     </div>
 
                                     <div class="form-group">
@@ -108,14 +103,17 @@
                                         <label for="picture_update">Photo:</label>
                                         <input type="file" name="file" id="picture_update"/>
                                     </div>
-                                    <input hidden name="currentPicture" title="picture" value="${ spot.image }" />
-                                </form:form>
+                                    <input type="hidden" name="currentPicture" title="picture" value="${ spot.image }" />
+                                    <input  type="hidden" class="form-control" name="topoId" id="topoId" value="${ spot.topoId }" />
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Save</button>
+                                    </div>
+                                   
+                                </form>
                             </div>
 
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" onclick="$('.publication-update').submit();">Save changes</button>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>

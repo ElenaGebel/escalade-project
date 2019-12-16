@@ -25,10 +25,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 
 @Controller
@@ -53,46 +55,24 @@ public class SpotController extends AbstractController{
 
     	spot.setName(request.getParameter("name"));
     	spot.setDescription(request.getParameter("description"));
-          
+    	spot.setTopoId(0);
+    	System.out.println("user.getId()=" + user.getId());
+    	spot.setUserId(user.getId());
     	spot.setDate(new Date());
         
     	spot.setId(spotManager.registerSpot(spot));
 
-        if (!file.isEmpty()) {
-            byte[] bytes = file.getBytes();
+        ServletContext context = request.getServletContext();
 
-            // Creating the directory to store file
-            ServletContext context = request.getServletContext();
-            String path = context.getRealPath("/image/spot");
-            
-            File dir = new File(path);
-            if (!dir.exists())
-                dir.mkdirs();
-
-            File serverFile = new File(dir.getAbsolutePath() + File.separator + "spot-" + spot.getId() + ".jpg");
-           
-            BufferedOutputStream stream;
-			try {
-				stream = new BufferedOutputStream(
-				        new FileOutputStream(serverFile));
-	            stream.write(bytes);
-	            stream.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-
-            spot.setImage("image/spot/" + serverFile.getName());
-        } else {
-        	spot.setImage("");
-        }
+        String fileName =  "spot" + spot.getId() + "-" + UUID.randomUUID().toString() + ".jpg";
         
+        if(uploadImage(file, context.getRealPath("/image/spot"), fileName))
+            spot.setImage("image/spot/" + fileName);
+        else
+    	    spot.setImage("");
+
         spotManager.updateSpot(spot);
         
-        List<Spot> spots = spotManager.getListSpots();
-
-        session.setAttribute("spots", spots);
         
         return "redirect:/spot";
     }
@@ -113,49 +93,47 @@ public class SpotController extends AbstractController{
     
 
     @PostMapping("/spot/{spotId}/update")
-    public String updateSpot(@ModelAttribute Spot spot, @PathVariable String spotId, @RequestParam String description, @RequestParam MultipartFile file, @RequestParam String currentPicture, HttpServletRequest request) throws IOException {
-        spot.setId(Integer.parseInt(spotId));
-        spot.setDescription(description);
+    public String updateSpot(@RequestParam MultipartFile file, @PathVariable String spotId, HttpServletRequest request) throws IOException {
+        
+    	Spot spot = new Spot();
 
+    	spot.setId(Integer.parseInt(spotId));
+    	spot.setName(request.getParameter("name"));
+    	spot.setDescription(request.getParameter("description"));    	
+    	spot.setTopoId(Integer.parseInt(request.getParameter("topoId")));
+    	
+        
+        ServletContext context = request.getServletContext();
+
+        String fileName =  "spot" + spot.getId() + "-" + UUID.randomUUID().toString() + ".jpg";
+        
+        if(uploadImage(file, context.getRealPath("/image/spot"), fileName))
+            spot.setImage("image/spot/" + fileName);
+        else
+    	    spot.setImage(request.getParameter("currentPicture"));
+
+        spotManager.updateSpot(spot);       
+
+        return "redirect:/spot";
+    }
+    
+    public Boolean uploadImage(MultipartFile file, String path, String fileName) throws IOException{
+    	
         if (!file.isEmpty()) {
-            byte[] bytes = file.getBytes();
-
-            // Creating the directory to store file
-            ServletContext context = request.getServletContext();
-            String path = context.getRealPath("/image/spot");
-            
+ 
             File dir = new File(path);
             if (!dir.exists())
                 dir.mkdirs();
 
-            File serverFile = new File(dir.getAbsolutePath() + File.separator + "spot-" + spot.getId() + ".jpg");
-           
-            BufferedOutputStream stream;
-			try {
-				stream = new BufferedOutputStream(
-				        new FileOutputStream(serverFile));
-	            stream.write(bytes);
-	            stream.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            file.transferTo(new File(dir.getAbsolutePath() + File.separator + fileName));
 
-
-			spot.setImage("image/spot/" + serverFile.getName());
+			return true;
         } else {
-        	spot.setImage("");
+        	return false;
         }
-
-        spotManager.updateSpot(spot);
-        
-
-        return "redirect:/spot";
     }
 
 
-
-    
     @PostMapping("/spot/{spotId}/picture-delete")
     public String deletespotPicture(@ModelAttribute Spot spot, @PathVariable String spotId, @RequestParam String picture, HttpServletRequest request) {
     	spot.setId(Integer.parseInt(spotId));

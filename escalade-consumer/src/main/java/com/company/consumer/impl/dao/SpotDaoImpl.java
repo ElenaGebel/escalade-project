@@ -23,13 +23,14 @@ public class SpotDaoImpl  extends AbstractDao implements SpotDao{
 	
 	public int registerSpot(Spot spot){
 
-	    String sql = "INSERT INTO spot (topo_id, name, description, image) VALUES (:topo_id, :name, :description, image);";
+	    String sql = "INSERT INTO spot (user_id, topo_id, name, description, image) VALUES (:user_id, :topo_id, :name, :description, :image);";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("topo_id", spot.getTopoId(), Types.VARCHAR);
+        params.addValue("topo_id", spot.getTopoId(), Types.INTEGER);
+        params.addValue("user_id", spot.getUserId(), Types.INTEGER);
         params.addValue("name", spot.getName(), Types.VARCHAR);
         params.addValue("description", spot.getDescription(), Types.VARCHAR);
-        params.addValue("image", spot.getDescription(), Types.VARCHAR);
+        params.addValue("image", spot.getImage(), Types.VARCHAR);
 
         KeyHolder holder = new GeneratedKeyHolder();
 
@@ -55,7 +56,7 @@ public class SpotDaoImpl  extends AbstractDao implements SpotDao{
     }
     
     public void addTopoToSpot(Spot spot) {
-        String sql = "INSERT INTO spot (topo_id) VALUES (:topo_id) WHERE spot.id = :spot_id ;";
+        String sql = "UPDATE spot SET topo_id = :topo_id WHERE spot.id = :spot_id ;";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue("topo_id", spot.getTopoId(), Types.INTEGER);
@@ -109,15 +110,16 @@ public class SpotDaoImpl  extends AbstractDao implements SpotDao{
     
     public Topo checkForTopo(Spot spot) {
         String sql = "SELECT  topo.name, topo.id, spot.id, spot.topo_id FROM spot, topo " +
-                     "WHERE spot.id = :spot_id AND spot.topo_id = topo.id;";
+                     "WHERE spot.id = ? AND spot.topo_id = topo.id;";
       
 
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue("spot_id", spot.getId(), Types.INTEGER);
+      /*  MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue("spot_id", spot.getId(), Types.INTEGER);*/
         
         RowMapper<Topo> rowMapper = new TopoRowMapper();
 
-        return getNamedParameterJdbcTemplate().queryForObject(sql, args, rowMapper);
+
+        return  getJdbcTemplate().queryForObject(sql, new Object[]{spot.getId()}, rowMapper);
     }
 }
 

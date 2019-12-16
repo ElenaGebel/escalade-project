@@ -1,5 +1,7 @@
 package com.company.business.contract.managers;
 import java.util.List;
+
+import com.company.model.bean.Spot;
 import com.company.model.bean.Topo;
 
 
@@ -10,5 +12,8 @@ public interface TopoManager {
 	void updateTopo(Topo topo);
 	List<Topo> getListTopos();
 	List<Topo> listForSearch(Topo topo);
+	List<Spot> getNotRelatedSpots(Topo topo);
+	List<Spot> getRelatedSpots(Topo topo);
+	Topo getTopo(Topo topo);
 
 }

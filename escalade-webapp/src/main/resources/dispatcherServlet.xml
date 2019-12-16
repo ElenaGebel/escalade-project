@@ -19,8 +19,7 @@
     
     <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
     <mvc:resources mapping="/style/**" location="/WEB-INF/style/" cache-period="31556926" />
-     <mvc:resources mapping="/images/**" location="/WEB-INF/images/" cache-period="31556926" />
-      <mvc:resources mapping="/image/topo/**" location="/image/topo/" cache-period="31556926" />
+    <mvc:resources mapping="image/**" location="/image/" cache-period="31556926" />
 
     <!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -30,7 +29,7 @@
     <!-- File upload -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <!-- setting maximum upload size -->
-        <property name="maxUploadSize" value="400000" />
+        <property name="maxUploadSize" value="4000000" />
     </bean>
 
     <!-- Internationalization -->

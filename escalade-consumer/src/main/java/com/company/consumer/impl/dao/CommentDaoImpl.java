@@ -19,14 +19,15 @@ public class CommentDaoImpl  extends AbstractDao implements CommentDao{
 
 
     public int registerComment(Comment comment) {
-        String sql = "INSERT INTO comment (user_id, topo_id, parent_id, text)" +
-                "VALUES (:user_id, :topo_id, :parent_id, :text)";
+        String sql = "INSERT INTO comment (user_id, topo_id, parent_id, text, date)" +
+                "VALUES (:user_id, :topo_id, :parent_id, :text, :date)";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue("user_id", comment.getUserId(), Types.INTEGER);
-        args.addValue("topo_id", comment.getId(), Types.INTEGER);
+        args.addValue("topo_id", comment.getTopoId(), Types.INTEGER);
         args.addValue("text", comment.getText(), Types.VARCHAR);
         args.addValue("parent_id", comment.getParentId(), Types.INTEGER);
+        args.addValue("date", comment.getDate(), Types.TIMESTAMP);
         
         KeyHolder holder = new GeneratedKeyHolder();
 
@@ -38,12 +39,11 @@ public class CommentDaoImpl  extends AbstractDao implements CommentDao{
     }
 
     public List<Comment> getParentsComments(Comment comment) {
-        String sql = "SELECT comment.id, comment.user_id, pseudo, text, comment.date" +
-                "FROM topo, comment, user_account " +
-                "WHERE topo.id = comment.topo_id " +
-                "AND comment.user_id = user_account.id " +
+        String sql = "SELECT comment.id, parent_id, user_id, user_account.pseudo, text, comment.date " +
+                "FROM comment, user_account " +
+                "WHERE comment.user_id = user_account.id " +
                 "AND comment.topo_id = :topo_id " +
-                "AND comment.parent_id IS NULL " +
+                "AND comment.parent_id = 0" +
                 "ORDER BY comment.date ASC;";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
@@ -55,12 +55,12 @@ public class CommentDaoImpl  extends AbstractDao implements CommentDao{
     }
 
     public List<Comment> getChildrenComments(Comment comment) {
-        String sql = "SELECT comment.id, comment.parent_id, comment.user_id, pseudo, text, comment.date " +
-                "FROM topo, comment, user_account " +
-                "WHERE topo.id = comment.topo_id " +
-                "AND comment.user_id = user_account.id " +
+        String sql = "SELECT comment.id, parent_id, user_id, user_account.pseudo, text, comment.date " +
+                "FROM comment, user_account " +
+                "WHERE comment.user_id = user_account.id " +
                 "AND comment.topo_id = :topo_id " +
                 "AND comment.parent_id IS NOT NULL " +
+                "AND comment.parent_id != 0 " +
                 "ORDER BY comment.date ASC;";
 
         MapSqlParameterSource args = new MapSqlParameterSource();

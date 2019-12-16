@@ -14,8 +14,9 @@ import org.springframework.jdbc.support.KeyHolder;
 
 import com.company.consumer.contract.dao.TopoDao;
 import com.company.consumer.impl.AbstractDao;
+import com.company.consumer.impl.rowMapper.SpotRowMapper;
 import com.company.consumer.impl.rowMapper.TopoRowMapper;
-
+import com.company.model.bean.Spot;
 import com.company.model.bean.Topo;
 import com.company.model.bean.User;
 
@@ -96,6 +97,118 @@ public class TopoDaoImpl  extends AbstractDao implements TopoDao{
     }
     
     
+    public Topo getTopo(Topo topo) {
+        String sql = "SELECT * FROM topo WHERE topo.id = :topo_id;";
+
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue("topo_id", topo.getId(), Types.INTEGER);
+
+        RowMapper<Topo> rowMapper = new TopoRowMapper();
+
+        return getNamedParameterJdbcTemplate().queryForObject(sql, args, rowMapper);
+    }
+
+    public List<Spot> getNotRelatedSpots(Topo topo) {
+        String sql = "SELECT spot.name, spot.id FROM spot WHERE spot.topo_id != :topo_id " +
+                "ORDER BY spot.name ASC;";
+
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue("topo_id", topo.getId(), Types.INTEGER);
+
+        RowMapper<Spot> rowMapper = new SpotRowMapper();
+
+        return getNamedParameterJdbcTemplate().query(sql, args, rowMapper);
+    }
+
+        public List<Spot> getRelatedSpots(Topo topo) {
+            String sql = "SELECT spot.name, spot.id FROM spot WHERE spot.topo_id = :topo_id " +
+                    "ORDER BY spot.name ASC;";
+
+            MapSqlParameterSource args = new MapSqlParameterSource();
+            args.addValue("topo_id", topo.getId(), Types.INTEGER);
+
+            RowMapper<Spot> rowMapper = new SpotRowMapper();
+            return getNamedParameterJdbcTemplate().query(sql, args, rowMapper);
+    }
+
+       /*   public void deleteTopoHastSpot(Topo topo, Spot spot) {
+        String sql = "DELETE FROM topo_has_spot WHERE topo_id = :topo_id AND spot_id = :spot_id;";
+
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue("topo_id", topo.getPublicationId(), Types.INTEGER);
+        args.addValue("spot_id", spot.getPublicationId(), Types.INTEGER);
+
+        getNamedParameterJdbcTemplate().update(sql, args);
+    }
+
+    public void addUserHasTopo(UserAccount user) {
+        String sql = "INSERT INTO user_has_topo (user_id, topo_id, is_loaned) VALUES (:user_id, :topo_id, FALSE)";
+
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue("user_id", user.getId(), Types.INTEGER);
+        args.addValue("topo_id", user.getTopo().getPublicationId(), Types.INTEGER);
+
+        getNamedParameterJdbcTemplate().update(sql, args);
+    }
+
+    public boolean getNotRelatedUser(Topo topo) {
+        String sql = "SELECT CASE WHEN exists( " +
+                "SELECT user_id " +
+                "FROM user_has_topo, topo " +
+                "WHERE user_has_topo.topo_id = topo.publication_id " +
+                "AND user_id = :user_id " +
+                "AND topo_id = :topo_id " +
+                ") " +
+                "THEN CAST(1 AS BOOLEAN) " +
+                "ELSE CAST(0 AS BOOLEAN) " +
+                "END;";
+
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue("user_id", topo.getUserAccountId(), Types.INTEGER);
+        args.addValue("topo_id", topo.getPublicationId(), Types.INTEGER);
+
+        return getNamedParameterJdbcTemplate().queryForObject(sql, args, boolean.class);
+    }
+
+    public List<UserAccount> getUserHasTopo(Topo topo) {
+        String sql = "SELECT pseudo, is_loaned, borrowing_date, return_date, user_id AS id, topo_id " +
+                "FROM user_account, user_has_topo " +
+                "WHERE user_account.id = user_has_topo.user_id " +
+                "AND topo_id = :topo_id " +
+                "ORDER BY return_date ASC;";
+
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue("topo_id", topo.getPublicationId(), Types.INTEGER);
+
+        RowMapper<UserAccount> rowMapper = new UserAccountRM();
+
+        return getNamedParameterJdbcTemplate().query(sql, args, rowMapper);
+    }
+
+    public void updateUserHasTopo(UserAccount user) {
+        String sql = "UPDATE user_has_topo " +
+                "SET user_id = :user_id, topo_id = :topo_id, is_loaned = :is_loaned, borrowing_date = :borrowing_date, return_date = :return_date " +
+                "WHERE user_id = :user_id AND topo_id = :topo_id;";
+
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue("user_id", user.getId(), Types.INTEGER);
+        args.addValue("topo_id", user.getTopo().getPublicationId(), Types.INTEGER);
+        args.addValue("is_loaned", user.getTopo().isLoaned(), Types.BOOLEAN);
+        args.addValue("borrowing_date", user.getTopo().getBorrowingDate(), Types.DATE);
+        args.addValue("return_date", user.getTopo().getReturnDate(), Types.DATE);
+
+        getNamedParameterJdbcTemplate().update(sql, args);
+    }
+
+    public void deleteUserHasTopo(UserAccount user) {
+        String sql = "DELETE FROM user_has_topo WHERE user_id = :user_id AND topo_id = :topo_id;";
+
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue("user_id", user.getId(), Types.INTEGER);
+        args.addValue("topo_id", user.getTopo().getPublicationId(), Types.INTEGER);
+
+        getNamedParameterJdbcTemplate().update(sql, args);
+    }*/
 
 }
 

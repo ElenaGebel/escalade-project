@@ -10,17 +10,10 @@
 
 <div class="container">
     <h1>${ topo.name }</h1>
-
+    
     <c:if test="${ !empty topo.image }">
         <div>
-            <img class="topo-img option-cursor" src="${ topo.image }" width="80%" data-toggle="collapse" data-target=".collapse-delete-picture">
-            <a class="option-cursor collapse collapse-delete-picture" onclick="$('.delete-picture').submit();">
-                <span class="glyphicon glyphicon-minus"></span> Supprimer
-            </a>
-
-            <form:form method="post" action="topo/${topo.id}/picture-delete" class="form-horizontal delete-picture" modelAttribute="topo">
-                <input hidden name="picture" title="picture" value="${ topo.image }" />
-            </form:form>
+            <img class="spot-img option-cursor" width="60%" src="${pageContext.request.contextPath}/${ topo.image }">
         </div>
     </c:if>
 
@@ -34,15 +27,16 @@
             </form:form>
         </c:if>
 
-        <c:if test="${ notRelatedSpots.size() > 0 }">
 
+        <c:if test="${ notRelatedSpots.size() > 0 }">
+           <br>
             <p>
                 <button type="button" class="btn btn-primary btn-xs" data-toggle="collapse" data-target=".collapse-menu">
-                    <span class="glyphicon glyphicon-plus"></span> Lier un spot
+                    <span class="glyphicon glyphicon-plus"></span> Lier un site
                 </button>
             </p>
 
-            <form method="post" action="topo-spot/${topo.id}" class="form-horizontal collapse collapse-menu">
+            <form method="post" action="addspot/${topo.id}" class="form-horizontal collapse collapse-menu">
                 <div class="form-group">
                     <label for="spots">Nom :</label>
                     <select name="spotId" id="spots">
@@ -71,17 +65,17 @@
     <h4>Description</h4>
     <p>${ topo.description }</p>
 
-    <!-- TopoHasSpot READ -->
-    <c:if test="${ topoHasSpots.size() > 0 }">
-        <h4>${ topo.spotsNumber } spot${ topoHasSpots.size() > 1 ? 's' : '' }</h4>
+    <!-- relatedSpots READ -->
+    <c:if test="${ relatedSpots.size() > 0 }">
+        <h4>${ relatedSpots.size() } site${ relatedSpots.size() > 1 ? 's' : '' }</h4>
         <ul>
-            <c:forEach var="spot" items="${ topoHasSpots }">
+            <c:forEach var="spot" items="${ relatedSpots }">
                 <li>
                     <a href="${pageContext.request.contextPath}/spot/${ spot.id }"><c:out value="${ spot.name }"/></a>
 
-                    <!-- TopoHasSpot DELETE -->
+                    <!-- relatedSpots DELETE -->
                     <c:if test="${ sessionScope.user.role == 'admin' }">
-                        <form hidden method="post" action="topo-spot/${ spot.id }/delete" class="spot-delete${ spot.id }">
+                        <form hidden method="post" action="deletespot/${ spot.id }" class="spot-delete${ spot.id }">
                             <input hidden name="topoId" title="topo_id" value="${ topo.id }" />
                         </form>
                         <span class="comment-point"> · </span>
@@ -95,7 +89,7 @@
     </c:if>
 
     <!-- UserHasTopo READ -->
-    <c:if test="${ userHasTopos.size() > 0 }">
+ <!--   <c:if test="${ userHasTopos.size() > 0 }">
         <h4>Topo disponibles à l'emprunt</h4>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -127,7 +121,7 @@
                 </tr>
 
                 <!-- UserHasTopo UPDATE -->
-                <c:if test="${ !empty sessionScope.user && userHasTopo.id == sessionScope.user.id }">
+             <!--    <c:if test="${ !empty sessionScope.user && userHasTopo.id == sessionScope.user.id }">
                     <div class="modal fade modal-menu">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -139,7 +133,7 @@
 
                                 <div class="modal-body">
                                     <!-- UserHasTopo DELETE -->
-                                    <form hidden method="post" action="user-topo/${topo.id}/delete" class="publication-delete"></form>
+                                <!--    <form hidden method="post" action="user-topo/${topo.id}/delete" class="publication-delete"></form>
 
                                     <form method="post" action="user-topo/${ topo.id }/update" class="form-horizontal publication-update">
                                         <div class="checkbox">
@@ -174,7 +168,7 @@
             </c:forEach>
             </tbody>
         </table>
-    </c:if>
+    </c:if>-->
 
     <%@include file="comments.jsp"%>
 </div>

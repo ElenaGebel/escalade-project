@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <%@ include file="include/html_head_libs.jsp" %>
     <title>${application.name}</title>
@@ -21,7 +21,6 @@
                     <img src="${ spot.image }" width="80%" id="img"  />
                      <a href="${pageContext.request.contextPath}/spot/${ spot.id }"><h1><c:out value="${ spot.name }" /></h1></a>
                          <p>${ spot.description }</p>
-                         <a class="btn btn-primary btn-lg" href="#" role="button">En savoir plus</a>
                 </div>
              </div> 
              <br>

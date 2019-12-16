@@ -5,10 +5,18 @@ import java.util.Date;
 public class Spot {
 	private int id;
 	private int topoId; 
+	private int userId; 
 	private String name;
 	private String image;
 	private String description;
 	private Date date;
+	
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 	
 	public Date getDate() {
 		return date;

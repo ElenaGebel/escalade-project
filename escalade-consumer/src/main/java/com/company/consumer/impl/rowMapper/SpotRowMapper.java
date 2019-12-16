@@ -14,6 +14,7 @@ public class SpotRowMapper implements RowMapper<Spot> {
         for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
             if (rs.getMetaData().getColumnName(i).equals("id")) spot.setId(rs.getInt("id"));
             else if (rs.getMetaData().getColumnName(i).equals("topo_id")) spot.setTopoId(rs.getInt("topo_id"));
+            else if (rs.getMetaData().getColumnName(i).equals("user_id")) spot.setUserId(rs.getInt("user_id"));
             else if (rs.getMetaData().getColumnName(i).equals("name")) spot.setName(rs.getString("name"));
             else if (rs.getMetaData().getColumnName(i).equals("description")) spot.setDescription(rs.getString("description"));
             else if (rs.getMetaData().getColumnName(i).equals("image")) spot.setImage(rs.getString("image"));
