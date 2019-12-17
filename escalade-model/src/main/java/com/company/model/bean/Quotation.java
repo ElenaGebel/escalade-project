@@ -2,6 +2,7 @@ package com.company.model.bean;
 
 public class Quotation {
 	private int id;
+	private String name;
 	public int getId() {
 		return id;
 	}
@@ -14,5 +15,5 @@ public class Quotation {
 	public void setName(String name) {
 		this.name = name;
 	}
-	private String name;
+
 }

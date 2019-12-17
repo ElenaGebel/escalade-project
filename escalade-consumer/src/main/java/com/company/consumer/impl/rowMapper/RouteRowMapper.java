@@ -13,8 +13,9 @@ public class RouteRowMapper implements RowMapper<Route> {
         for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
         	
         	 if (rs.getMetaData().getColumnName(i).equals("id")) route.setId(rs.getInt("id"));
-        	 else if (rs.getMetaData().getColumnName(i).equals("parent_id")) route.setParentId(rs.getInt("publication_id"));
+        	 else if (rs.getMetaData().getColumnName(i).equals("parent_id")) route.setParentId(rs.getInt("parent_id"));
              else if (rs.getMetaData().getColumnName(i).equals("secteur_id")) route.setSectorId(rs.getInt("secteur_id"));
+             else if (rs.getMetaData().getColumnName(i).equals("user_id")) route.setUserId(rs.getInt("user_id"));
              else if (rs.getMetaData().getColumnName(i).equals("name")) route.setName(rs.getString("name"));
              else if (rs.getMetaData().getColumnName(i).equals("description")) route.setDescription(rs.getString("description"));
        

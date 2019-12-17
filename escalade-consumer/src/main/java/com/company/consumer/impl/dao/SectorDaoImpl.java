@@ -22,11 +22,11 @@ public class SectorDaoImpl extends AbstractDao implements SectorDao {
 
         MapSqlParameterSource args = new MapSqlParameterSource();
         if( sector != null) {
-        	sql = "SELECT * FROM sector WHERE sector.spot_id = :spot_id;";
+        	sql = "SELECT * FROM secteur WHERE sector.spot_id = :spot_id;";
         	 args.addValue("spot_id", sector.getSpotId(), Types.INTEGER);
         }
         else {
-        	sql = "SELECT * FROM sector WHERE sector.spot_id IS NULL;";
+        	sql = "SELECT * FROM secteur;";
         }
        
 
@@ -36,10 +36,11 @@ public class SectorDaoImpl extends AbstractDao implements SectorDao {
     }
 
     public int registerSector(Sector sector) {
-        String sql = "INSERT INTO sector (spot_id, name, description) VALUES :spot_id, :name, : description);";
+        String sql = "INSERT INTO secteur (spot_id, user_id, name, description) VALUES (:spot_id, :user_id, :name, :description);";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue("spot_id", sector.getSpotId(), Types.INTEGER);
+        args.addValue("user_id", sector.getUserId(), Types.INTEGER);
         
         args.addValue("name", sector.getName(), Types.VARCHAR);
         args.addValue("description", sector.getDescription(), Types.VARCHAR);
@@ -54,7 +55,7 @@ public class SectorDaoImpl extends AbstractDao implements SectorDao {
     }
 
     public void updateSector(Sector sector) {
-        String sql = "UPDATE sector SET name = :name, description = :description, spot_id = :spot_id  WHERE sector.id = :sector_id;";
+        String sql = "UPDATE secteur SET name = :name, description = :description, spot_id = :spot_id  WHERE secteur.id = :sector_id;";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue("spot_id", sector.getSpotId(), Types.INTEGER);
@@ -66,7 +67,7 @@ public class SectorDaoImpl extends AbstractDao implements SectorDao {
     }
 
     public void deleteSector(Sector sector) {
-    	String sql = "DELETE FROM sector WHERE sector.id = :sector_id;";
+    	String sql = "DELETE FROM secteur WHERE secteur.id = :sector_id;";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue("sector_id", sector.getId(), Types.INTEGER);
@@ -76,7 +77,7 @@ public class SectorDaoImpl extends AbstractDao implements SectorDao {
     
     public List<Sector> listForSearch(Sector sector) {
         String sql = "SELECT id, topo_id, name, description, image " +
-                "FROM sector " +
+                "FROM secteur " +
                 "WHERE LOWER(name) LIKE LOWER(:name) " +
                 "ORDER BY name ASC;";
 

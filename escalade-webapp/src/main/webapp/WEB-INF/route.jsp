@@ -2,7 +2,7 @@
 <html>
 <head>
     <%@ include file="include/html_head_libs.jsp" %>
-    <title>${application.name}-topos</title>
+    <title>${application.name}-voies</title>
 </head>
 <body>
 
@@ -18,7 +18,7 @@
                 <span class="glyphicon glyphicon-plus"></span> Ajouter une voie
             </button>
         </p>
-        <form:form method="post" action="sector/$sectorId}" class="form-horizontal collapse collapse-menu" modelAttribute="route">
+        <form:form method="post" action="route" class="form-horizontal collapse collapse-menu" modelAttribute="route">
             <input hidden name="current_uri" title="current_uri" value="${ currentURI }" />
 
             <div class="form-group">
@@ -40,7 +40,7 @@
                 <div class="col-sm-10">
                     <form:select path="quotation">
                         <c:forEach var="quotation_range" items="${ quotations }">
-                            <form:option value="${ quotation_range.name }a">${ quotation_range.name }</form:option>
+                            <form:option value="${ quotation_range.id }">${ quotation_range.name }</form:option>
                         </c:forEach>
                     </form:select>
                 </div>
@@ -66,7 +66,16 @@
                     <form:input type="number" class="form-control" path="pointsNum" placeholder="Enter a route points number" min="0" max="60"/>
                 </div>
             </div>
-
+           <c:if test="${ sectors.size() > 0 }">
+                <div class="form-group">
+                    <label for="sectors">Lier un secteur </label>
+                    <select name="sectorId" id="sectors">
+                        <c:forEach var="sector" items="${ sectors }">
+                            <option value="${ sector.id }">${ sector.name }</option>
+                        </c:forEach>
+                    </select>
+                </div>
+          </c:if>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Ajouter</button>
@@ -98,39 +107,36 @@
 
                 <c:if test="${ !empty sessionScope.user }">
                     <td class="text-center">
-                        <c:if test="${ sessionScope.user.role == 'admin' }">
-                            <form:form method="post" action="${route.sectorId}/route/${ route.id }/delete" class="publication-delete${ route.id }" modelAttribute="route"/>
+                            <c:if test="${ sessionScope.user.role == 'admin' or sessionScope.user.id == sector.userId}">
+                            <form:form method="post" action="route/${ route.id }/delete" class="publication-delete${ route.id }" modelAttribute="route"/>
+		                         <div class="btn-group btn-group-xs">
+		                            <a title="Modify" class="btn btn-primary" data-toggle="modal" data-target=".modal-menu${ route.id }" data-backdrop="static" data-keyboard="false">
+		                                <span class="glyphicon glyphicon-pencil"></span>
+		                            </a>
+		                             <a title="Delete" class="btn btn-danger" onclick="$('.publication-delete${ route.id }').submit();">
+		                                    <span class="glyphicon glyphicon-remove"></span>
+		                             </a>
+		                        </div>
                         </c:if>
 
-                        <div class="btn-group btn-group-xs">
-                            <a title="Modify" class="btn btn-primary" data-toggle="modal" data-target=".modal-menu${ route.id }" data-backdrop="static" data-keyboard="false">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </a>
-
-                            <!-- Route DELETE -->
-                            <c:if test="${ sessionScope.user.role == 'admin' }">
-                                <a title="Delete" class="btn btn-danger" onclick="$('.publication-delete${ route.id }').submit();">
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                </a>
-                            </c:if>
-                        </div>
+                       
                     </td>
                 </c:if>
             </tr>
 
             <!-- Route UPDATE -->
             <c:if test="${ !empty sessionScope.user }">
-                <div class="modal fade modal-menu${ route.publicationId }">
+                <div class="modal fade modal-menu${ route.id }">
                     <div class="modal-dialog">
                         <div class="modal-content">
 
-                            <div class="modal-header">
+                            <div class="modal-header">                            
+                                <h4 class="modal-title">Mettre a jour</h4>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Mise à jour</h4>
                             </div>
 
                             <div class="modal-body">
-                                <form:form method="post" action="${route.sectorId}/route/${route.id}/update" class="form-horizontal publication-update" modelAttribute="route">
+                                <form:form method="post" action="route/${route.id}/update" class="form-horizontal publication-update" modelAttribute="route">
                                     <div class="form-group">
                                         <label for="name_update">Nom :</label>
                                         <form:input type="text" class="form-control" path="name" id="name_update" placeholder="Enter a route name" value="${ route.name }" />
@@ -146,25 +152,35 @@
                                         <form:select path="quotation" id="quotation_update">
                                             <form:option value="${ route.quotation }">--</form:option>
 						                        <c:forEach var="quotation_range" items="${ quotations }">
-						                            <form:option value="${ quotation_range.name }a">${ quotation_range.name }</form:option>
+						                            <form:option value="${ quotation_range.id }">${ quotation_range.name }</form:option>
 						                        </c:forEach>
                                         </form:select>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="laititude_update">laititude :</label>
-                                        <form:input type="text" class="form-control" path="laititude" id="laititude_update" placeholder="Enter a route laititude" value="${ route.laititude }" />
+                                        <form:input type="text" class="form-control" path="laititude" id="laititude_update" placeholder="Laititude" value="${ route.laititude }" />
                                     </div>
 
                                     <div class="form-group">
                                         <label for="longitude_update">Longitude :</label>
-                                        <form:input type="text" class="form-control" path="longitude" id="longitude_update" placeholder="Enter a route longitude" value="${ route.longitude }" />
+                                        <form:input type="text" class="form-control" path="longitude" id="longitude_update" placeholder="Longitude" value="${ route.longitude }" />
                                     </div>
 
                                     <div class="form-group">
                                         <label for="points_number_update">Nombre de points :</label>
                                         <form:input type="number" class="form-control" path="pointsNum" id="points_number_update" placeholder="Enter a route points number" min="0" max="60" value="${ route.pointsNum }"/>
                                     </div>
+                                    <c:if test="${ sectors.size() > 0 }">
+						                <div class="form-group">
+						                    <label for="sectors">Lier un secteur </label>
+						                    <select name="sectorId" id="sectors">
+						                        <c:forEach var="sector" items="${ sectors }">
+						                            <option value="${ sector.id }">${ sector.name }</option>
+						                        </c:forEach>
+						                    </select>
+						                </div>
+						          </c:if>
                                 </form:form>
                             </div>
 

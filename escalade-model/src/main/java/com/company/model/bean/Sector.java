@@ -3,9 +3,18 @@ package com.company.model.bean;
 public class Sector {
 	private int id;
 	private int spotId; 
+	private int userId; 
+
 
 	private String name;
 	private String description;
+	
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 	
 	public int getId() {
 		return id;

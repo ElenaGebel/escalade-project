@@ -15,7 +15,14 @@ public class Route {
 
 	private String laititude;
 	private String longitude;
+	private int userId; 
 	
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 	public String getLaititude() {
 		return laititude;
 	}

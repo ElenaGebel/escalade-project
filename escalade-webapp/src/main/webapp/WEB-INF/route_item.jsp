@@ -11,7 +11,7 @@
     <h1>${ route.name }</h1>
 
     <!-- Length CREATE -->
-    <c:if test="${ !empty sessionScope.user && route.typeRoute == 'route' }">
+ <!--    <c:if test="${ !empty sessionScope.user && route.type == 'route' }">
         <p>
             <button type="button" class="btn btn-primary btn-xs" data-toggle="collapse" data-target=".collapse-menu">
                 <span class="glyphicon glyphicon-plus"></span> Ajouter une longueur
@@ -37,7 +37,7 @@
                 <div class="col-sm-10">
                     <form:select path="quotation">
                         <c:forEach var="quotation_range" items="${ quotations }">
-                            <form:option value="${ quotation_range.name }a">${ quotation_range.name }</form:option>
+                            <form:option value="${ quotation_range.id }">${ quotation_range.name }</form:option>
                         </c:forEach>
                     </form:select>
                 </div>
@@ -71,14 +71,14 @@
             </div>
         </form:form>
     </c:if>
-
+--> 
     <h4>Description</h4>
-    <p>${ route.name } -> ${ route.height } mètres, ${ route.pointsNum } points, quotation ${ route.quotation }</p>
+    <p>${ route.name } -> ${ route.height } metres, ${ route.pointsNum } points</p>
 
-    <c:if test="${ listLength.size() > 0 }">
+ <!--    <c:if test="${ listLength.size() > 0 }">
         <h4>Liste des longueurs</h4>
 
-        <!-- Length READ -->
+      
         <table class="table table-bordered table-striped table-condensed">
             <thead>
             <tr>
@@ -110,7 +110,7 @@
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </a>
 
-                                <!-- Length DELETE -->
+                                
                                 <c:if test="${ sessionScope.user.role == 'admin' }">
                                     <a title="Delete" class="btn btn-danger" onclick="$('.publication-delete${ length.id }').submit();">
                                         <span class="glyphicon glyphicon-remove"></span>
@@ -121,7 +121,7 @@
                     </c:if>
                 </tr>
 
-                <!-- Length UPDATE -->
+            
                 <c:if test="${ !empty sessionScope.user }">
                     <div class="modal fade modal-menu${ length.id }">
                         <div class="modal-dialog">
@@ -149,7 +149,7 @@
                                             <form:select path="quotation" id="quotation_update">
                                                 <form:option value="${ length.quotation }">--</form:option>
 							                        <c:forEach var="quotation_range" items="${ quotations }">
-							                            <form:option value="${ quotation_range.name }a">${ quotation_range.name }</form:option>
+							                            <form:option value="${ quotation_range.id }">${ quotation_range.name }</form:option>
 							                        </c:forEach>
                                             </form:select>
                                         </div>
@@ -183,9 +183,8 @@
             </tbody>
         </table>
     </c:if>
-
+-->
 </div>
 
-<%@ include file="include/footer.jsp" %>
 </body>
 </html>

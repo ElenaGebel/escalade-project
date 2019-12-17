@@ -19,18 +19,23 @@ import com.company.model.bean.Route;
 public class RouteDaoImpl extends AbstractDao implements RouteDao{
 	
     public List<Route> listRoutesFromParent(Route route) {
-        String sql = "SELECT * FROM route WHERE route.parent_id = :route_id;";
+        String sql;
 
         MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue("route_id", route.getId(), Types.INTEGER);
-
+        if( route != null) {
+        	sql = "SELECT * FROM voie WHERE voie.parent_id = :route_id;";
+        	args.addValue("route_id", route.getId(), Types.INTEGER);
+        }else {
+        	sql = "SELECT * FROM voie;";
+        }
+       
         RowMapper<Route> rowMapper = new RouteRowMapper();
 
         return getNamedParameterJdbcTemplate().query(sql, args, rowMapper);
     }
     
     public Route getRoute(Route route) {
-        String sql = "SELECT * FROM route WHERE route.id = :route_id;";
+        String sql = "SELECT * FROM voie WHERE voie.id = :route_id;";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue("route_id", route.getId(), Types.INTEGER);
@@ -51,19 +56,20 @@ public class RouteDaoImpl extends AbstractDao implements RouteDao{
     }
 
     public int registerRoute(Route route) {
-        String sql = "INSERT INTO voie (name, secteur_id, parent_id, height, quotation, laititude, longitude, points_num, type) " +
-                "VALUES (:name, :secteur_id, :parent_id, :height, :quotation, :laititude, :longitude, :points_num, :type);";
+        String sql = "INSERT INTO voie (name, secteur_id, parent_id, user_id, height, quotation, latitude, longitude, points_num, type) " +
+                "VALUES (:name, :secteur_id, :parent_id, :user_id, :height, :quotation, :latitude, :longitude, :points_num, :type);";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
 
         args.addValue("name", route.getName(), Types.VARCHAR);
         args.addValue("secteur_id", route.getSectorId(), Types.INTEGER);
+        args.addValue("user_id", route.getUserId(), Types.INTEGER);
         args.addValue("parent_id", route.getParentId(), Types.INTEGER);
         args.addValue("height", route.getHeight(), Types.INTEGER);
-        args.addValue("quotation", route.getQuotation(), Types.VARCHAR);
+        args.addValue("quotation", route.getQuotation(), Types.INTEGER);
         args.addValue("description", route.getDescription(), Types.VARCHAR);
         
-        args.addValue("laititude", route.getLaititude(), Types.VARCHAR);
+        args.addValue("latitude", route.getLaititude(), Types.VARCHAR);
         args.addValue("longitude", route.getLongitude(), Types.VARCHAR);
         args.addValue("points_num", route.getPointsNum(), Types.INTEGER);
         args.addValue("type", route.getType(), Types.VARCHAR);
@@ -78,7 +84,7 @@ public class RouteDaoImpl extends AbstractDao implements RouteDao{
     }
 
     public List<Route> listRoutsForSector(Route route) {
-    	  String sql = "SELECT * FROM route WHERE route.secteur_id = :secteur_id;";
+    	  String sql = "SELECT * FROM voie WHERE voie.secteur_id = :secteur_id;";
 
           MapSqlParameterSource args = new MapSqlParameterSource();
           args.addValue("secteur_id", route.getSectorId(), Types.INTEGER);
@@ -89,7 +95,7 @@ public class RouteDaoImpl extends AbstractDao implements RouteDao{
     }
     
     public List<Route> listFreeRouts(Route route) {
-  	    String sql = "SELECT * FROM route WHERE route.secteur_id IS NULL ;";
+  	    String sql = "SELECT * FROM voie WHERE voie.secteur_id IS NULL ;";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue("secteur_id", route.getSectorId(), Types.INTEGER);
@@ -100,8 +106,8 @@ public class RouteDaoImpl extends AbstractDao implements RouteDao{
     }
 
     public void updateRoute(Route route) {
-        String sql = "UPDATE route SET height = height, quotation = :quotation, laititude = :laititude, longitude = :longitude, points_num = :points_num " +
-                "WHERE route.id = :route_id;";
+        String sql = "UPDATE voie SET name = :name, secteur_id = :secteur_id, height = :height, quotation = :quotation, latitude = :latitude, longitude = :longitude, points_num = :points_num " +
+                "WHERE voie.id = :route_id;";
         
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue("route_id", route.getId(), Types.INTEGER);
@@ -109,10 +115,10 @@ public class RouteDaoImpl extends AbstractDao implements RouteDao{
         args.addValue("secteur_id", route.getSectorId(), Types.INTEGER);
         args.addValue("parent_id", route.getParentId(), Types.INTEGER);
         args.addValue("height", route.getHeight(), Types.INTEGER);
-        args.addValue("quotation", route.getQuotation(), Types.VARCHAR);
+        args.addValue("quotation", route.getQuotation(), Types.INTEGER);
         args.addValue("description", route.getDescription(), Types.VARCHAR);
         
-        args.addValue("laititude", route.getLaititude(), Types.VARCHAR);
+        args.addValue("latitude", route.getLaititude(), Types.VARCHAR);
         args.addValue("longitude", route.getLongitude(), Types.VARCHAR);
         args.addValue("points_num", route.getPointsNum(), Types.INTEGER);
         args.addValue("type", route.getType(), Types.VARCHAR);
@@ -121,8 +127,8 @@ public class RouteDaoImpl extends AbstractDao implements RouteDao{
     }
 
     public void deleteRoute(Route route) {
-        String sql = "DELETE FROM route WHERE route.id IN (SELECT route.id FROM route WHERE route.parent_id = :route_id);" +
-                "DELETE FROM route WHERE route.id = :route_id;";
+        String sql = "DELETE FROM voie WHERE voie.id IN (SELECT voie.id FROM voie WHERE voie.parent_id = :route_id);" +
+                "DELETE FROM voie WHERE voie.id = :route_id;";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue("route_id", route.getId(), Types.INTEGER);
@@ -131,8 +137,8 @@ public class RouteDaoImpl extends AbstractDao implements RouteDao{
     }
 
     public List<Route> listLengthsFromRoute(Route route) {
-        String sql = "SELECT route.name, route.id, route.sector_id, route.height, route.points_num, quotation, laititude, longitude FROM route "
-        		+ "WHERE route.parent_id = :route_id AND type = :type;";
+        String sql = "SELECT * FROM voie "
+        		+ "WHERE voie.parent_id = :route_id AND type = :type;";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue("route_id", route.getParentId(), Types.INTEGER);
@@ -145,7 +151,7 @@ public class RouteDaoImpl extends AbstractDao implements RouteDao{
     
     public List<Route> listForSearch(Route route) {
         String sql = "SELECT id, parent_id, name, height, quotation, points_num " +
-                "FROM route " +
+                "FROM voie " +
                 "WHERE LOWER(name) LIKE LOWER(:name) " +
                 "AND (height <= :height OR height ISNULL) " +
                 "AND quotation LIKE :quotation " +
