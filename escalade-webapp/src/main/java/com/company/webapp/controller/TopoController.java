@@ -180,13 +180,9 @@ public class TopoController extends AbstractController{
 
         modelMap.addAttribute("publicationId", topoId);
         modelMap.addAttribute("topo", topoManager.getTopo(topo));
-        
-        
+                
         modelMap.addAttribute("notRelatedSpots", topoManager.getNotRelatedSpots(topo));
         modelMap.addAttribute("relatedSpots", topoManager.getRelatedSpots(topo));
-        
-      //  modelMap.addAttribute("notRelatedUser", topoManager.getNotRelatedUser(topo));
-       // modelMap.addAttribute("userHasTopos", topoManager.getUserHasTopo(topo));
         
         modelMap.addAttribute("parentsComments", comments.getParentsComments(comment));
         modelMap.addAttribute("childrenComments", comments.getChildrenComments(comment));
@@ -214,50 +210,32 @@ public class TopoController extends AbstractController{
         
         return "redirect:/topo/" + topoId;
     }
-/*
-    @PostMapping("/user-topo/{topoId}")
-    public String addUserHasTopo(@PathVariable String topoId, @SessionAttribute UserAccount user) {
-        user.setTopo(new Topo());
-        user.getTopo().setPublicationId(Integer.parseInt(topoId));
 
-        webappToConsumer.addUserHasTopo(user);
-        return "redirect:/topo/" + topoId;
+    @PostMapping("/topo/reserver/{topoId}")
+    public String reserverTopo(@PathVariable String topoId, HttpServletRequest request) {
+    	 Topo topo = new Topo();
+
+         topo.setUserReservedId(((User) request.getSession().getAttribute("user")).getId());
+
+         topo.setId(Integer.parseInt(topoId));
+         topo.setReserved(true);
+         topo.setReservationDate(new Date());
+         topoManager.updateReservation(topo);
+         return "redirect:/topo/" + topoId;
     }
 
-    @PostMapping("/user-topo/{topoId}/update")
-    public String updateUserHasTopo(@PathVariable String topoId, @SessionAttribute User user, HttpServletRequest request) throws ParseException {
-        user.setId(user.getId());
-        user.setTopo(new Topo());
-        user.getTopo().setPublicationId(Integer.parseInt(topoId));
+    @PostMapping("/topo/unreserver/{topoId}")
+    public String updateReservation(@PathVariable String topoId, HttpServletRequest request) throws ParseException {
+    	Topo topo = new Topo();
 
-        if (request.getParameter("loaned") != null) user.getTopo().setLoaned(true);
-        else user.getTopo().setLoaned(false);
+        topo.setUserReservedId(((User) request.getSession().getAttribute("user")).getId());
 
-        String expectedPattern = "yyyy-MM-dd";
-        SimpleDateFormat formatter = new SimpleDateFormat(expectedPattern);
-        String borrowingDate = request.getParameter("borrowing_date");
-        String returnDate = request.getParameter("return_date");
-
-        if (!borrowingDate.equals("")) user.getTopo().setBorrowingDate(formatter.parse(borrowingDate));
-        else user.getTopo().setBorrowingDate(null);
-        if (!returnDate.equals("")) user.getTopo().setReturnDate(formatter.parse(returnDate));
-        else user.getTopo().setReturnDate(null);
-
-        webappToConsumer.updateUserHasTopo(user);
+        topo.setId(Integer.parseInt(topoId));
+        topo.setReserved(false);
+        topo.setReservationDate(new Date());
+        topoManager.updateReservation(topo);
         return "redirect:/topo/" + topoId;
     }
-
-    @PostMapping("/user-topo/{topoId}/delete")
-    public String deleteUserHasTopo(@PathVariable String topoId, @SessionAttribute User user) {
-        user.setId(user.getId());
-        user.setTopo(new Topo());
-        user.getTopo().setPublicationId(Integer.parseInt(topoId));
-
-        webappToConsumer.deleteUserHasTopo(user);
-        return "redirect:/topo/" + topoId;
-    }*/
-    
-
 
 
 }

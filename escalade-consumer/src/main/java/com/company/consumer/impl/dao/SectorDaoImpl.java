@@ -76,13 +76,12 @@ public class SectorDaoImpl extends AbstractDao implements SectorDao {
     }
     
     public List<Sector> listForSearch(Sector sector) {
-        String sql = "SELECT id, topo_id, name, description, image " +
-                "FROM secteur " +
-                "WHERE LOWER(name) LIKE LOWER(:name) " +
-                "ORDER BY name ASC;";
+        String sql = "SELECT * FROM secteur " +
+        		  "WHERE (LOWER(name) LIKE LOWER(:text) OR LOWER(description) LIKE LOWER(:text)) " +
+                  "ORDER BY name ASC;";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue("name", "%" + sector.getName() + "%", Types.VARCHAR);
+        args.addValue("text", "%" + sector.getName() + "%", Types.VARCHAR);
 
         RowMapper<Sector> rowMapper = new SectorRowMapper();
 

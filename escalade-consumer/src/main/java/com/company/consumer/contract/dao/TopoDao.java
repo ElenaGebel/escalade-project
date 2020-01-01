@@ -13,4 +13,5 @@ public interface TopoDao {
 	List<Spot> getNotRelatedSpots(Topo topo);
 	List<Spot> getRelatedSpots(Topo topo);
 	Topo getTopo(Topo topo);
+	void updateReservation(Topo topo);
 }

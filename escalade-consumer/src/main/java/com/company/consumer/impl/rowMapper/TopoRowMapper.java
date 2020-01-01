@@ -16,14 +16,20 @@ public class TopoRowMapper implements RowMapper<Topo>{
 			
 			if (rs.getMetaData().getColumnName(i).equals("id")) 
 				topo.setId(rs.getInt("id"));
-			if (rs.getMetaData().getColumnName(i).equals("user_id")) 
+			else if (rs.getMetaData().getColumnName(i).equals("user_id")) 
 				topo.setUserId(rs.getInt("user_id"));
-			if (rs.getMetaData().getColumnName(i).equals("name")) 
+			else if (rs.getMetaData().getColumnName(i).equals("name")) 
 				topo.setName(rs.getString("name"));
 			else if(rs.getMetaData().getColumnName(i).equals("description"))
 				topo.setDescription(rs.getString("description"));
 			else if(rs.getMetaData().getColumnName(i).equals("image"))
 				topo.setImage(rs.getString("image"));
+			else if(rs.getMetaData().getColumnName(i).equals("reserved"))
+				topo.setReserved(rs.getBoolean("reserved"));
+			else if(rs.getMetaData().getColumnName(i).equals("date_reservation"))
+				topo.setReservationDate(rs.getDate("date_reservation"));
+			else if (rs.getMetaData().getColumnName(i).equals("user_reserved_id")) 
+				topo.setUserReservedId(rs.getInt("user_reserved_id"));
 		/*	else if(rs.getMetaData().getColumnName(i).equals("date_publication"))
 				topo.setDate(rs.getTimestamp("date_publication"));*/
 

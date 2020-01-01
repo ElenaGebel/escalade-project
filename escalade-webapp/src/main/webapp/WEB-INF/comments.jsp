@@ -6,13 +6,13 @@
                 <div class="media thumbnail">
                     <div class="media-body">
                         <div><b>${ parentComment.user.pseudo }</b> ${ parentComment.text }</div>
-                        <span class="comment-point">${ !empty parentComment.date ? parentComment.date : '' }</span>
+                        <span class="comment-point">${ !empty parentComment.date ? parentComment.getFormatDate() : '' }</span>
                         <div>
                             <c:if test="${ !empty sessionScope.user }">
-                                <a class="btn btn-primary btn-sm" data-toggle="modal" data-target=".modal-reply-${parentComment.id}" data-backdrop="static" data-keyboard="false">Repondre</a>
+                                <a class="option-cursor" href="#" data-toggle="modal" data-target=".modal-reply-${parentComment.id}" data-backdrop="static" data-keyboard="false">Repondre</a>
 
                                 <c:if test="${ sessionScope.user.id == parentComment.userId }">
-                                    <a class="btn btn-secondary btn-sm"  data-toggle="modal" data-target=".modal-parent-${ parentComment.id }" data-backdrop="static" data-keyboard="false">Modifier</a>
+                                    <a class="option-cursor" href="#"  data-toggle="modal" data-target=".modal-parent-${ parentComment.id }" data-backdrop="static" data-keyboard="false">Modifier</a>
                                 </c:if>
 
                                 <c:if test="${ sessionScope.user.role == 'admin' || sessionScope.user.id == parentComment.userId }">
@@ -20,7 +20,8 @@
                                         <input hidden name="currentURI" title="currentURI" value="${ currentURI }" />
                                         <input hidden name="publicationId" title="publicationId" value="${ publicationId }" />
                                     </form>
-                                    <a class="btn btn-danger btn-sm" onclick="$('.parent-comment-delete${ parentComment.id }').submit();">Supprimer</a>
+                                    <a class="option-cursor" href="#" onclick="$('.parent-comment-delete${ parentComment.id }').submit();">Supprimer</a>
+                                     
                                 </c:if>
                             </c:if>
                             
@@ -34,13 +35,13 @@
                                             <div class="media-body">
                                                 <div> <b> ${ childComment.user.pseudo }</b></div>
                                                <div>  ${ childComment.text }</div>
-                                                 <span class="comment-point">${ !empty childComment.date ? childComment.date : '' }</span>
+                                                 <span class="comment-point">${ !empty childComment.date ? childComment.getFormatDate() : '' }</span>
                                                 <div>
                                                     <c:if test="${ !empty sessionScope.user }">
-                                                        <a class="btn btn-primary btn-sm" data-toggle="modal" data-target=".modal-reply-${childComment.parentId }"  data-backdrop="static" data-keyboard="false">Repondre</a>
+                                                        <a class="option-cursor" href="#" data-toggle="modal" data-target=".modal-reply-${childComment.parentId }"  data-backdrop="static" data-keyboard="false">Repondre</a>
 
                                                         <c:if test="${ sessionScope.user.id == childComment.userId }">
-                                                            <a class="btn btn-secondary btn-sm" data-toggle="modal" data-target=".modal-child-${ childComment.id }" data-backdrop="static" data-keyboard="false">Modifier</a>
+                                                            <a class="option-cursor" href="#" data-toggle="modal" data-target=".modal-child-${ childComment.id }" data-backdrop="static" data-keyboard="false">Modifier</a>
                                                         </c:if>
 
                                                         <c:if test="${ sessionScope.user.role == 'admin' || sessionScope.user.id == childComment.userId }">
@@ -48,7 +49,7 @@
                                                                 <input hidden name="currentURI" title="currentURI" value="${ currentURI }" />
                                                                 <input hidden name="publicationId" title="publicationId" value="${ publicationId }" />
                                                             </form>
-                                                            <a class="btn btn-danger btn-sm" title="Delete" onclick="$('.child-comment-delete${ childComment.id }').submit();">Supprimer</a>
+                                                            <a class="option-cursor" href="#" title="Delete" onclick="$('.child-comment-delete${ childComment.id }').submit();">Supprimer</a>
                                                         </c:if>
                                                     </c:if>
                                                    

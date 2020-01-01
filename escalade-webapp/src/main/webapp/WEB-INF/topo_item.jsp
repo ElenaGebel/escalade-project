@@ -9,16 +9,10 @@
 <%@ include file="include/menu.jsp" %>
 
 <div class="container">
-    <h1>${ topo.name }</h1>
-    
-    <c:if test="${ !empty topo.image }">
-        <div>
-            <img class="spot-img option-cursor" width="60%" src="${pageContext.request.contextPath}/${ topo.image }">
-        </div>
-    </c:if>
 
-    <c:if test="${ !empty sessionScope.user }">
-        <c:if test="${ sessionScope.user.role == 'admin' }">
+    <h1>${ topo.name }</h1>
+        <c:if test="${ !empty sessionScope.user }">
+        <c:if test="${ sessionScope.user.role == 'admin' or sessionScope.user.id == topo.userId }">
             <form:form method="post" action="topo/${topo.id}/delete" modelAttribute="topo">
                 <input hidden name="picture" title="picture" value="${ topo.image }" />
                 <button type="submit" class="btn btn-danger btn-xs">
@@ -26,8 +20,14 @@
                 </button>
             </form:form>
         </c:if>
+    </c:if>
+    <c:if test="${ !empty topo.image }">
+        <div>
+            <img class="spot-img option-cursor" width="60%" src="${pageContext.request.contextPath}/${ topo.image }">
+        </div>
+    </c:if>
 
-
+    <c:if test="${ !empty sessionScope.user }">
         <c:if test="${ notRelatedSpots.size() > 0 }">
            <br>
             <p>
@@ -53,11 +53,21 @@
         </c:if>
 
         <!-- UserHasTopo CREATE -->
-        <c:if test="${ notRelatedUser == false }">
-            <form hidden method="post" action="user-topo/${ topo.id }" class="user-topo-add"></form>
+        <c:if test="${!topo.reserved}">
+            <h5>Topo est disponible pour reservation.</h5>
+            <form hidden method="post" action="reserver/${ topo.id }" class="user-topo-add"></form>
             <button type="button" class="btn btn-warning btn-xs" onclick="$('.user-topo-add').submit();">
-                <span class="glyphicon glyphicon-ok"></span> Je possède ce topo
+                <span class="glyphicon glyphicon-ok"></span> Reserver
             </button>
+        </c:if>
+        <c:if test="${ topo.reserved}">
+            <h5>Topo reserve. Date debut de reservation: ${ topo.getReservationDate() }.</h5>
+	        <c:if test="${ sessionScope.user.id == topo.userId }">	            
+	            <form hidden method="post" action="unreserver/${ topo.id}" class="user-topo-delete"></form>
+	            <button type="button" class="btn btn-warning btn-xs" onclick="$('.user-topo-delete').submit();">
+	                <span class="glyphicon glyphicon-ok"></span> Annuler reservation 
+	            </button>
+	        </c:if>
         </c:if>
     </c:if>
 
@@ -74,101 +84,18 @@
                     <a href="${pageContext.request.contextPath}/spot/${ spot.id }"><c:out value="${ spot.name }"/></a>
 
                     <!-- relatedSpots DELETE -->
-                    <c:if test="${ sessionScope.user.role == 'admin' }">
+                    <c:if test="${ sessionScope.user.role == 'admin' or sessionScope.user.id == topo.userId }">
                         <form hidden method="post" action="deletespot/${ spot.id }" class="spot-delete${ spot.id }">
                             <input hidden name="topoId" title="topo_id" value="${ topo.id }" />
                         </form>
-                        <span class="comment-point"> · </span>
-                        <a title="Delete" class="option-cursor" onclick="$('.spot-delete${ spot.id }').submit();">
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </a>
+                        <a title="Delete" href="#" class="option-cursor" onclick="$('.spot-delete${ spot.id }').submit();">
+                           Supprimer
+                        </a>                        
                     </c:if>
                 </li>
             </c:forEach>
         </ul>
     </c:if>
-
-    <!-- UserHasTopo READ -->
- <!--   <c:if test="${ userHasTopos.size() > 0 }">
-        <h4>Topo disponibles à l'emprunt</h4>
-        <table class="table table-bordered table-striped table-condensed">
-            <thead>
-            <tr>
-                <th>Grimpeur</th>
-                <th>Disponibilité</th>
-                <th>Date d'emprunt</th>
-                <th>Date de retour</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach var="userHasTopo" items="${ userHasTopos }">
-                <tr>
-                    <td><c:out value="${ userHasTopo.pseudo }"/></td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${ !empty sessionScope.user && userHasTopo.id == sessionScope.user.id }">
-                                <a title="Modify" class="option-cursor" data-toggle="modal" data-target=".modal-menu" data-backdrop="static" data-keyboard="false">
-                                    <c:out value="${ userHasTopo.topo.loaned == true ? 'emprunté' : 'disponible' }"/>
-                                </a>
-                            </c:when>
-                            <c:otherwise>
-                                <c:out value="${ userHasTopo.topo.loaned == true ? 'emprunté' : 'disponible' }"/>
-                            </c:otherwise>
-                        </c:choose>
-                    </td>
-                    <td><c:if test="${ !empty userHasTopo.topo.borrowingDateString }"><c:out value="${ userHasTopo.topo.borrowingDateString }"/></c:if></td>
-                    <td><c:if test="${ !empty userHasTopo.topo.returnDateString }"><c:out value="${ userHasTopo.topo.returnDateString }"/></c:if></td>
-                </tr>
-
-                <!-- UserHasTopo UPDATE -->
-             <!--    <c:if test="${ !empty sessionScope.user && userHasTopo.id == sessionScope.user.id }">
-                    <div class="modal fade modal-menu">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Mise à jour</h4>
-                                </div>
-
-                                <div class="modal-body">
-                                    <!-- UserHasTopo DELETE -->
-                                <!--    <form hidden method="post" action="user-topo/${topo.id}/delete" class="publication-delete"></form>
-
-                                    <form method="post" action="user-topo/${ topo.id }/update" class="form-horizontal publication-update">
-                                        <div class="checkbox">
-                                            <b>Disponibilité : </b>
-                                            <label>
-                                                <input type="checkbox" name="loaned" value="${ userHasTopo.topo.loaned }" ${ userHasTopo.topo.loaned ? 'checked' : '' }/>
-                                                est emprunté
-                                            </label>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="borrowing_date_update">Date d'emprunt :</label>
-                                            <input type="date" class="form-control" name="borrowing_date" id="borrowing_date_update"/>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="return_date_update">Date de retour :</label>
-                                            <input type="date" class="form-control" name="return_date" id="return_date_update"/>
-                                        </div>
-                                    </form>
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-danger" onclick="$('.publication-delete').submit();">Delete</button>
-                                    <button type="button" class="btn btn-primary" onclick="$('.publication-update').submit();">Save changes</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </c:if>
-            </c:forEach>
-            </tbody>
-        </table>
-    </c:if>-->
 
     <%@include file="comments.jsp"%>
 </div>

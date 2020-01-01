@@ -1,5 +1,6 @@
 package com.company.model.bean;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Comment {
@@ -50,6 +51,12 @@ public class Comment {
 	public Date getDate() {
 		return date;
 	}
+    public String getFormatDate() {
+        if (date != null)
+            return new SimpleDateFormat("dd MMMM yyyy, hh:mm").format(date);
+        else
+            return null;
+    }
 	public void setDate(Date date) {
 		this.date = date;
 	}

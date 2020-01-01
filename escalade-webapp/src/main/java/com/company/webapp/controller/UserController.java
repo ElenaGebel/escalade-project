@@ -65,7 +65,7 @@ public class UserController extends AbstractController{
         if(!validate(user.getPassword())) {
         	session.setAttribute("reponse", new Reponse(true, "Votre mot de passe doit comporter de 6 à 20 caractères, "
         			+ "se composer de chiffres et de lettres et comprendre "
-        			+ "des majuscules/minuscules ou des caractères spéciaux."));
+        			+ "des majuscules/minuscules et des caractères spéciaux(@#$%!)."));
         	return "inscription";
         }
         
@@ -160,7 +160,7 @@ public class UserController extends AbstractController{
         }else if(!validate(request.getParameter("new_password"))) {
         	reponse = new Reponse(true, "Votre mot de passe doit comporter de 6 à 20 caractères, "
         			+ "se composer de chiffres et de lettres et comprendre "
-        			+ "des majuscules/minuscules ou des caractères spéciaux.");
+        			+ "des majuscules/minuscules et des caractères spéciaux(@#$%!).");
         }else if(!EmailValidator.getInstance().isValid(request.getParameter("email"))) {
         	reponse = new Reponse(true, "Adress email pas valide");
         	

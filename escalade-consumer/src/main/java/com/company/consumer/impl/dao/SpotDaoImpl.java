@@ -86,11 +86,11 @@ public class SpotDaoImpl  extends AbstractDao implements SpotDao{
 	
     public List<Spot> listForSearch(Spot spot) {
         String sql = "SELECT * FROM spot " +
-                "WHERE (LOWER(name) LIKE LOWER('%c%') OR LOWER(description) LIKE LOWER('%c%')) " +
+                "WHERE (LOWER(name) LIKE LOWER(:text) OR LOWER(description) LIKE LOWER(:text)) " +
                 "ORDER BY name ASC;";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue("publication_text", "%" + spot.getName() + "%", Types.VARCHAR);
+        args.addValue("text", "%" + spot.getName() + "%", Types.VARCHAR);
 
         RowMapper<Spot> rowMapper = new SpotRowMapper();
 

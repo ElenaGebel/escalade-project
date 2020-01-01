@@ -150,18 +150,17 @@ public class RouteDaoImpl extends AbstractDao implements RouteDao{
     }
     
     public List<Route> listForSearch(Route route) {
-        String sql = "SELECT id, parent_id, name, height, quotation, points_num " +
-                "FROM voie " +
+        String sql = "SELECT * FROM voie " +
                 "WHERE LOWER(name) LIKE LOWER(:name) " +
                 "AND (height <= :height OR height ISNULL) " +
-                "AND quotation LIKE :quotation " +
+                "AND quotation <= :quotation OR quotation ISNULL " +
                 "AND (points_num >= :points_num ISNULL) " +
                 "ORDER BY name ASC;";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue("name", "%" + route.getName() + "%", Types.VARCHAR);
         args.addValue("height", route.getHeight(), Types.INTEGER);
-        args.addValue("quotation", route.getQuotation(), Types.VARCHAR);
+        args.addValue("quotation", route.getQuotation(), Types.INTEGER);
         args.addValue("points_num", route.getPointsNum(), Types.INTEGER);
 
         RowMapper<Route> rowMapper = new RouteRowMapper();

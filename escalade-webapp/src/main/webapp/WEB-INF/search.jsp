@@ -34,45 +34,42 @@
 
         <div class="form-group">
             <label for="quotation">Cotation :</label>
-            <select name="quotation" id="quotation">
-                <c:forEach var="quotation_range" begin="3" end="9">
-                    <option value="${ quotation_range }a">${ quotation_range }a</option>
-                    <option value="${ quotation_range }b">${ quotation_range }b</option>
-                    <option value="${ quotation_range }c">${ quotation_range }c</option>
-                </c:forEach>
-            </select>
+                <select name="quotation"  id="quotation">
+                    <c:forEach var="quotation_range" items="${ quotations }">
+                        <option value="${ quotation_range.id }">${ quotation_range.name }</option>
+                    </c:forEach>
+             </select>
         </div>
 
         <div class="form-group">
             <label for="points_number">Nombre de points :</label>
             <input type="number" class="form-control" name="points_number" id="points_number"/>
         </div>
-
         <button type="submit" class="btn btn-primary">Rechercher</button>
     </form>
-
+<br>
     <c:if test="${ publicationList.size() > 0 }">
-        <h4>Résultat</h4>
+        <h4>Resultat</h4>
         <ul>
             <c:choose>
                 <c:when test="${ typePublication == 'spot' }">
                     <c:forEach var="publication" items="${ publicationList }">
-                        <li><a href="${pageContext.request.contextPath}/climbing/${ publication.publicationId }"><c:out value="${ publication.name }"/></a></li>
+                        <li><a href="${pageContext.request.contextPath}/spot/${ publication.id }"><c:out value="${ publication.name }"/></a></li>
                     </c:forEach>
                 </c:when>
                 <c:when test="${ typePublication == 'sector' }">
                     <c:forEach var="publication" items="${ publicationList }">
-                        <li><a href="${pageContext.request.contextPath}/climbing/sector/${ publication.publicationId }"><c:out value="${ publication.name }"/></a></li>
+                        <li><a href="${pageContext.request.contextPath}/spot/${ publication.spotId }"><c:out value="${ publication.name }"/></a></li>
                     </c:forEach>
                 </c:when>
                 <c:when test="${ typePublication == 'route' }">
                     <c:forEach var="publication" items="${ publicationList }">
-                        <li><a href="${pageContext.request.contextPath}/climbing/route/${ publication.parentPublicationId == 0 ? publication.publicationId : publication.parentPublicationId }"><c:out value="${ publication.name }"/></a></li>
+                        <li><a href="${pageContext.request.contextPath}/route/${ publication.id }"><c:out value="${ publication.name }"/></a></li>
                     </c:forEach>
                 </c:when>
                 <c:when test="${ typePublication == 'topo' }">
                     <c:forEach var="publication" items="${ publicationList }">
-                        <li><a href="${pageContext.request.contextPath}/topo/${ publication.publicationId }"><c:out value="${ publication.name }"/></a></li>
+                        <li><a href="${pageContext.request.contextPath}/topo/${ publication.id }"><c:out value="${ publication.name }"/></a></li>
                     </c:forEach>
                 </c:when>
             </c:choose>

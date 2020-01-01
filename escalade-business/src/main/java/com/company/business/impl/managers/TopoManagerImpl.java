@@ -41,5 +41,8 @@ public class TopoManagerImpl extends AbstractManager implements TopoManager{
 	public Topo getTopo(Topo topo){
 		return getDaoFactory().getTopoDao().getTopo(topo);
 	}
-
+	
+	public void updateReservation(Topo topo){
+		getDaoFactory().getTopoDao().updateReservation(topo);
+	}
 }

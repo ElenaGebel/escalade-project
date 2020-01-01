@@ -1,5 +1,6 @@
 package com.company.model.bean;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Topo {
@@ -9,7 +10,41 @@ public class Topo {
 	private String image;
 	private String description;
 	private Date date;
+	private Date reservationDate;
+	private Date reservationEndDate;
+	private Boolean reserved;
+	private int userReservedId; 
 	
+	public String getReservationDate() {
+		if (reservationDate != null)
+            return new SimpleDateFormat("dd MMMM yyyy").format(reservationDate);
+        else
+            return null;
+	}
+	public void setReservationDate(Date reservationDate) {
+		this.reservationDate = reservationDate;
+	}
+	public String getReservationEndDate() {
+		if (reservationEndDate != null)
+            return new SimpleDateFormat("dd MMMM yyyy").format(reservationEndDate);
+        else
+            return null;
+	}
+	public void setReservationEndDate(Date reservationEndDate) {
+		this.reservationEndDate = reservationEndDate;
+	}
+	public Boolean getReserved() {
+		return reserved;
+	}
+	public void setReserved(Boolean reserved) {
+		this.reserved = reserved;
+	}
+	public int getUserReservedId() {
+		return userReservedId;
+	}
+	public void setUserReservedId(int userReservedId) {
+		this.userReservedId = userReservedId;
+	}
 	public int getId() {
 		return id;
 	}

@@ -105,7 +105,7 @@
 
                                     <div class="form-group">
                                         <label for="description_update">Description :</label>
-                                       <textarea class="form-control" name="description" id="description_update" placeholder="Enter a spot description">${ spot.description }</textarea>   
+                                       <textarea class="form-control" name="description" id="description_update" placeholder="Enter a sector description">${ sector.description }</textarea>   
                                     </div>
                                    <c:if test="${ spots.size() > 0 }">
 						                <div class="form-group">
