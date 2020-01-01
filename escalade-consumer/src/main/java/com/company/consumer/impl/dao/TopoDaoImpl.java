@@ -27,9 +27,7 @@ public class TopoDaoImpl  extends AbstractDao implements TopoDao{
 	public int registerTopo(Topo topo){
 
 	    String sql = "INSERT INTO topo (user_id, name, description, image, date_publication) "
-	    		+ "VALUES (:user_id, :name, :description, :image, :date_publication); "
-	    		+ "INSERT INTO user_topo_reservation (user_id, topo_id, reserved) VALUES "
-	    		+ "(:user_id, (SELECT currval('topo_id_seq')), FALSE);";
+	    		+ "VALUES (:user_id, :name, :description, :image, :date_publication);";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("user_id", topo.getUserId(), Types.INTEGER);
@@ -43,14 +41,27 @@ public class TopoDaoImpl  extends AbstractDao implements TopoDao{
         
         int generatedKey = (Integer) holder.getKeys().get("id");
         
+        sql = "INSERT INTO user_topo_reservation (user_id, topo_id, reserved) "
+        		+ "VALUES (:user_id, :topo_id, FALSE);";
+        
+        params.addValue("topo_id", generatedKey, Types.INTEGER);
+        
+        getNamedParameterJdbcTemplate().update(sql, params);
+        
         return generatedKey;
 
 	}
 
-	public void deleteTopo(Topo topo){
-		
-	       String sql = "DELETE FROM topo WHERE topo.id = :topo_id; "
-	       		+ "DELETE FROM user_topo_reservation WHERE user_topo_reservation.topo_id = :topo_id;";
+	public void deleteTopo(Topo topo){		
+        String sql = "DELETE FROM voie WHERE voie.secteur_id "
+        		+ "IN (SELECT secteur.id FROM secteur WHERE secteur.spot_id "
+        		+ "IN (SELECT spot.id FROM spot WHERE spot.topo_id = :topo_id));"
+    			+ "DELETE FROM secteur WHERE secteur.spot_id "
+    			+ "IN (SELECT spot.id FROM spot WHERE spot.topo_id = :topo_id);"
+        		+ "DELETE FROM spot WHERE spot.topo_id = :topo_id;"
+        		+ "DELETE FROM comment WHERE comment.topo_id = :topo_id;"
+		        + "DELETE FROM user_topo_reservation WHERE user_topo_reservation.topo_id = :topo_id; "
+	    		+ "DELETE FROM topo WHERE topo.id = :topo_id;";
 
 	        MapSqlParameterSource args = new MapSqlParameterSource();
 	        args.addValue("topo_id", topo.getId(), Types.INTEGER);

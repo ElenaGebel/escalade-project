@@ -41,11 +41,29 @@
                     <input type="file" name="file" id="spot_image"/>
                 </div>
             </div>         
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Ajouter</button>
+            <c:if test="${ topos.size() > 0 }">
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="topos">Lier un topo </label>
+                    <div class="col-sm-10">
+	                    <select name="topoId" id="topos">
+	                        <c:forEach var="topo" items="${ topos }">
+	                            <option value="${ topo.id }">${ topo.name }</option>
+	                        </c:forEach>
+	                    </select>
+                    </div>
                 </div>
-            </div>
+                
+                <div class="form-group">
+	                <div class="col-sm-offset-2 col-sm-10">
+	                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Ajouter</button>
+	                </div>
+               </div>
+          </c:if>
+		    <c:if test="${ topos.size() == 0 }">
+		        <div class="alert alert-warning alert-dismissable">
+		            <strong>Attention! Il faut d'abord ajouter un topo.</strong>
+		        </div>
+		    </c:if>
         </form>
          </div>
     </c:if>
@@ -103,8 +121,18 @@
                                         <label for="picture_update">Photo:</label>
                                         <input type="file" name="file" id="picture_update"/>
                                     </div>
+                                    
+                                    <c:if test="${ topos.size() > 0 }">
+						                <div class="form-group">
+						                    <label for="topos">Lier un topo </label>
+						                    <select name="topoId" id="topos">
+						                        <c:forEach var="topo" items="${ topos }">
+						                            <option value="${ topo.id }">${ topo.name }</option>
+						                        </c:forEach>
+						                    </select>
+						                </div>
+						            </c:if>
                                     <input type="hidden" name="currentPicture" title="picture" value="${ spot.image }" />
-                                    <input  type="hidden" class="form-control" name="topoId" id="topoId" value="${ spot.topoId }" />
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Save</button>

@@ -107,7 +107,7 @@
 
                 <c:if test="${ !empty sessionScope.user }">
                     <td class="text-center">
-                            <c:if test="${ sessionScope.user.role == 'admin' or sessionScope.user.id == sector.userId}">
+                            <c:if test="${ sessionScope.user.role == 'admin' or sessionScope.user.id == route.userId}">
                             <form:form method="post" action="route/${ route.id }/delete" class="publication-delete${ route.id }" modelAttribute="route"/>
 		                         <div class="btn-group btn-group-xs">
 		                            <a title="Modify" class="btn btn-primary" data-toggle="modal" data-target=".modal-menu${ route.id }" data-backdrop="static" data-keyboard="false">

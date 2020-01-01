@@ -87,20 +87,5 @@ public class RouteController  extends AbstractController{
 	        return "redirect:/route/" + parentId;
 	    }
 
-	    @PostMapping("/route/{parentId}/{lengthId}/update")
-	    public String updateLength(@ModelAttribute Route length, @PathVariable String parentId, @PathVariable String lengthId) {
-	        length.setId(Integer.parseInt(lengthId));
-
-	        routeManager.updateRoute(length);
-	        return "redirect:/route/" + parentId;
-	    }
-
-	    @PostMapping("/route/{parentId}/{lengthId}/delete")
-	    public String deleteLength(@ModelAttribute Route length, @PathVariable String parentId, @PathVariable String lengthId) {
-	        length.setId(Integer.parseInt(lengthId));
-
-	        routeManager.deleteRoute(length);
-	        return "redirect:/route/" + parentId;
-	    }
 
 }

@@ -2,6 +2,7 @@ package com.company.webapp.controller;
 
 
 import com.company.business.contract.managers.SpotManager;
+import com.company.business.contract.managers.TopoManager;
 import com.company.model.bean.Comment;
 import com.company.model.bean.Spot;
 import com.company.model.bean.Topo;
@@ -37,17 +38,18 @@ import javax.servlet.http.Part;
 public class SpotController extends AbstractController{
 
 	private SpotManager spotManager = getManagerFactory().getSpotManager();
-       
+	private TopoManager topoManager = getManagerFactory().getTopoManager();
 
     @GetMapping("/spot")
     public ModelAndView listSpots(ModelMap modelMap) {
         modelMap.addAttribute("spots", spotManager.getListSpots());
+        modelMap.addAttribute("topos",  topoManager.getListTopos());
         
         return new ModelAndView("spot", "spot", new Spot());
     }
     
     @PostMapping("/spot")
-    public String addSpot(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException  {
+    public String addSpot(@RequestParam int topoId, @RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException  {
     	Spot spot = new Spot();
    	
     	HttpSession session = request.getSession();
@@ -55,11 +57,11 @@ public class SpotController extends AbstractController{
 
     	spot.setName(request.getParameter("name"));
     	spot.setDescription(request.getParameter("description"));
-    	spot.setTopoId(0);
+    	spot.setTopoId(topoId);
     	System.out.println("user.getId()=" + user.getId());
     	spot.setUserId(user.getId());
     	spot.setDate(new Date());
-        
+    	
     	spot.setId(spotManager.registerSpot(spot));
 
         ServletContext context = request.getServletContext();
@@ -100,8 +102,7 @@ public class SpotController extends AbstractController{
     	spot.setId(Integer.parseInt(spotId));
     	spot.setName(request.getParameter("name"));
     	spot.setDescription(request.getParameter("description"));    	
-    	spot.setTopoId(Integer.parseInt(request.getParameter("topoId")));
-    	
+    	spot.setTopoId(Integer.parseInt(request.getParameter("topoId")));   	
         
         ServletContext context = request.getServletContext();
 

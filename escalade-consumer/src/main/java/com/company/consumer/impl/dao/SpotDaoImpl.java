@@ -66,7 +66,10 @@ public class SpotDaoImpl  extends AbstractDao implements SpotDao{
     }
 
     public void deleteSpot(Spot spot) {
-        String sql = "DELETE FROM spot WHERE spot.id = :spot_id;";
+        String sql = "DELETE FROM voie WHERE voie.secteur_id "
+        		+ "IN (SELECT secteur.id FROM secteur WHERE secteur.spot_id = :spot_id);"
+    			+ "DELETE FROM secteur WHERE secteur.spot_id = :spot_id;"
+        		+ "DELETE FROM spot WHERE spot.id = :spot_id;";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue("spot_id", spot.getId(), Types.INTEGER);

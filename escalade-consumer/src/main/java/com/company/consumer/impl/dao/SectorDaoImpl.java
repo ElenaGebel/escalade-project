@@ -67,7 +67,8 @@ public class SectorDaoImpl extends AbstractDao implements SectorDao {
     }
 
     public void deleteSector(Sector sector) {
-    	String sql = "DELETE FROM secteur WHERE secteur.id = :sector_id;";
+    	String sql = "DELETE FROM voie WHERE voie.secteur_id = :sector_id; "
+    			+ "DELETE FROM secteur WHERE secteur.id = :sector_id;";
 
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue("sector_id", sector.getId(), Types.INTEGER);
