@@ -4,7 +4,7 @@
 
 - Application web réalisé en Java/JEE 
 - Serveur Apache Tomcat 8.5
-- Base de données PostGreSQL 12.1.1
+- Base de données PostgreSQL 12.1.1
 - ApacheMaven
 
 
