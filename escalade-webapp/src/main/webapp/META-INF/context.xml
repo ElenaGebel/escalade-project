@@ -3,7 +3,7 @@
     <Resource name="jdbc/DB_ESCALADE"
               auth="Container"
               type="javax.sql.DataSource"
-              url="jdbc:postgresql://localhost:5432/db_test"
+              url="jdbc:postgresql://localhost:5432/db_ocescalade"
               driverClassName="org.postgresql.Driver"
               username="postgres"
               password="1"
