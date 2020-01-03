@@ -17,6 +17,9 @@
 test user login: test@gmail.com  
 mot de pass: Escalade3!
 
+test user2 login: test2@gmail.com 
+mot de pass: Escalade3!
+
 admin login: admin@gmail.com  
 mot de pass: Escalade3!
 
