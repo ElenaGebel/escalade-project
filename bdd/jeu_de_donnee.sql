@@ -1,8 +1,6 @@
 INSERT INTO user_account (pseudo, password, email, role, date) VALUES ('test user','$2a$10$Z9I/Mf1jLr938S.6ayZwMOPNsP0xluNlslJ6rxfvckMn9qFnbOb5q', 'test@gmail.com', 'user', '2019-12-07 09:48:34');
 INSERT INTO user_account (pseudo, password, email, role, date) VALUES ('test user2','$2a$10$Z9I/Mf1jLr938S.6ayZwMOPNsP0xluNlslJ6rxfvckMn9qFnbOb5q', 'test2@gmail.com', 'user', '2019-12-07 09:48:34');
 INSERT INTO user_account (pseudo, password, email, role, date) VALUES ('admin user','$2a$10$Z9I/Mf1jLr938S.6ayZwMOPNsP0xluNlslJ6rxfvckMn9qFnbOb5q', 'admin@gmail.com', 'admin', '2019-12-07 09:48:34');
- 
-pass: Escalade3!
 
 INSERT INTO quotation (name) VALUES ('3a');
 INSERT INTO quotation (name) VALUES ('3b');
@@ -43,3 +41,7 @@ INSERT INTO user_topo_reservation (user_id, topo_id, reserved) VALUES ('1', '3',
 INSERT INTO spot (user_id, name, description, image, topo_id) VALUES ('1', 'Arudy', 'La vallée d’Ossau est l’une des trois grandes vallées de montagne de la région béarnaise. Elle s’étire du nord au sud depuis Pau jusqu’au col du Pourtalet, à la frontière espagnole, sous le regard bienveillant du pic du Midi d’Ossau (2884 mètres), à la silhouette bicéphale si caractéristique. ', 'image/spot/spot23-75e0eaa8-72d3-4b55-b04a-821b9714ef77.jpg', '1' );
 INSERT INTO spot (user_id, name, description, image, topo_id) VALUES ('1', 'Badami', 'Depuis quelques années, Badamii est devenu une destination prisée des grimpeurs. On peut en effet jouir des joies de la grimpe sur du grés rouge, tout en savourant le calme, la tranquillité et le dépaysement qu’offrent les lieux.', 'image/spot/spot23-75e0eaa8-72d3-4b55-b04a-821b9714ef77.jpg', '2' );
 INSERT INTO spot (user_id, name, description, image, topo_id) VALUES ('1', 'Gorges du Tarn', 'En pénétrant dans les Gorges du Tarn, vous entrez dans le royaume des grandes envolées interminables sur des murs de dolomie calcaire démesurés, parsemés de trous de toutes dimensions et toutes formes.', 'image/spot/spot23-75e0eaa8-72d3-4b55-b04a-821b9714ef77.jpg', '3' );
+
+
+INSERT INTO secteur (spot_id, name, description, user_id) VALUES ('1', 'Arudy', 'Arudy', '1' );
+INSERT INTO secteur (spot_id, name, description, user_id) VALUES ('2', 'Badami', 'Badami', '1' );
