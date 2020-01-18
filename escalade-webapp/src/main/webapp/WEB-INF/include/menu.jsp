@@ -22,6 +22,11 @@
       <li class="nav-item">
           <a class="nav-link" href="${pageContext.request.contextPath}/route">Les Voies</a>
       </li>
+      <c:if test="${ !empty sessionScope.user }">
+          <li class="nav-item">
+              <a class="nav-link" href="${pageContext.request.contextPath}/reservation">Mes Topos</a>
+          </li>
+      </c:if>
       <li class="nav-item">
           <a class="nav-link" href="${pageContext.request.contextPath}/search">Recherche</a>
       </li>

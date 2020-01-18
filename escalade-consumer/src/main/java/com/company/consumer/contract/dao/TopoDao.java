@@ -3,6 +3,8 @@ import java.util.List;
 
 import com.company.model.bean.Spot;
 import com.company.model.bean.Topo;
+import com.company.model.bean.User;
+
 
 public interface TopoDao {
 	int registerTopo(Topo topo);
@@ -14,4 +16,6 @@ public interface TopoDao {
 	List<Spot> getRelatedSpots(Topo topo);
 	Topo getTopo(Topo topo);
 	void updateReservation(Topo topo);
+	List<Topo> getListReservations(User user);
+	List<Topo> getListToposForUser(User user);
 }

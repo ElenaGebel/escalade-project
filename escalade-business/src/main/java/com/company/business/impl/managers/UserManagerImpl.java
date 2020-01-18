@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.company.business.contract.managers.UserManager;
 
+
 public class UserManagerImpl extends AbstractManager implements UserManager{
 	
 	public Reponse registerUser(User user) {

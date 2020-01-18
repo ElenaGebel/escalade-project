@@ -26,7 +26,6 @@ public class RouteRowMapper implements RowMapper<Route> {
             else if (rs.getMetaData().getColumnName(i).equals("points_num")) route.setPointsNum(rs.getInt("points_num"));
             else if (rs.getMetaData().getColumnName(i).equals("type")) route.setType(rs.getString("type"));
         }
-
         return route;
     }
 }

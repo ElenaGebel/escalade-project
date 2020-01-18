@@ -41,6 +41,7 @@ public class SectorController  extends AbstractController{
         return new ModelAndView("sector", "sector", new Sector());
     }
 
+    
     @PostMapping("/sector")
     public String addSector(@ModelAttribute Sector sector, @RequestParam int spotId,  HttpServletRequest request) {
     	HttpSession session = request.getSession();

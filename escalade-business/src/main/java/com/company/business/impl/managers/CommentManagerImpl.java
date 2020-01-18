@@ -6,6 +6,7 @@ import com.company.business.contract.managers.CommentManager;
 import com.company.business.impl.AbstractManager;
 import com.company.model.bean.Comment;
 
+
 public class CommentManagerImpl extends AbstractManager implements CommentManager{
 	
 	public int registerComment(Comment comment){

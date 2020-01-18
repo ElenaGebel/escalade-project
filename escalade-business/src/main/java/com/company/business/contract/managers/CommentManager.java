@@ -2,7 +2,7 @@ package com.company.business.contract.managers;
 
 import java.util.List;
 
-import com.company.model.bean.Comment;;
+import com.company.model.bean.Comment;
 
 public interface CommentManager {
 	int registerComment(Comment comment);

@@ -41,8 +41,8 @@ public class TopoDaoImpl  extends AbstractDao implements TopoDao{
         
         int generatedKey = (Integer) holder.getKeys().get("id");
         
-        sql = "INSERT INTO user_topo_reservation (user_id, topo_id, reserved) "
-        		+ "VALUES (:user_id, :topo_id, FALSE);";
+        sql = "INSERT INTO user_topo_reservation (user_id, topo_id, reserved, status_reservation, user_reserved_id) "
+        		+ "VALUES (:user_id, :topo_id, FALSE, 0, 0);";
         
         params.addValue("topo_id", generatedKey, Types.INTEGER);
         
@@ -90,7 +90,8 @@ public class TopoDaoImpl  extends AbstractDao implements TopoDao{
 	
 	public List<Topo> getListTopos(){
 		String sql = "SELECT topo.id, topo.user_id, topo.name, topo.description, topo.image, topo.date_publication,  user_topo_reservation.topo_id, "
-				+ "user_topo_reservation.reserved, user_topo_reservation.date_reservation, user_topo_reservation.user_reserved_id "
+				+ "user_topo_reservation.reserved, user_topo_reservation.status_reservation, user_topo_reservation.date_reservation, "
+				+ "user_topo_reservation.user_reserved_id "
 				+ "FROM topo, user_topo_reservation "
 				+ "WHERE topo.id = user_topo_reservation.topo_id;";
 		RowMapper<Topo> rm = new TopoRowMapper();
@@ -98,6 +99,38 @@ public class TopoDaoImpl  extends AbstractDao implements TopoDao{
         List<Topo> topo = getJdbcTemplate().query(sql, rm);
 
         return topo;
+	}
+	
+	public List<Topo> getListToposForUser(User user){
+		String sql = "SELECT topo.id, topo.user_id, topo.name, topo.date_publication,  user_topo_reservation.topo_id, "
+				+ "user_topo_reservation.reserved, user_topo_reservation.status_reservation, user_topo_reservation.date_reservation, "
+				+ "user_topo_reservation.user_reserved_id, topo.description, topo.image "
+				+ "FROM topo, user_topo_reservation "
+				+ "WHERE topo.user_id = :user_id "
+		        + "AND topo.id = user_topo_reservation.topo_id;";
+		
+		MapSqlParameterSource args = new MapSqlParameterSource();
+		args.addValue("user_id", user.getId(), Types.INTEGER);
+		
+		RowMapper<Topo> rm = new TopoRowMapper();
+        
+        return getNamedParameterJdbcTemplate().query(sql, args, rm);
+	}
+	
+	public List<Topo> getListReservations(User user){
+		String sql = "SELECT topo.id, topo.user_id, topo.name, topo.date_publication,  user_topo_reservation.topo_id, "
+				+ "user_topo_reservation.reserved, user_topo_reservation.status_reservation, user_topo_reservation.date_reservation, "
+				+ "user_topo_reservation.user_reserved_id, topo.description, topo.image "
+				+ "FROM topo, user_topo_reservation "
+				+ "WHERE topo.id = user_topo_reservation.topo_id "
+				+ "AND user_topo_reservation.user_reserved_id = :user_id";
+		
+		MapSqlParameterSource args = new MapSqlParameterSource();
+		args.addValue("user_id", user.getId(), Types.INTEGER);
+		
+		RowMapper<Topo> rm = new TopoRowMapper();
+        
+        return getNamedParameterJdbcTemplate().query(sql, args, rm);
 	}
 	
     public List<Topo> listForSearch(Topo topo) {
@@ -115,8 +148,9 @@ public class TopoDaoImpl  extends AbstractDao implements TopoDao{
     
     
     public Topo getTopo(Topo topo) {
-    	String sql = "SELECT topo.id, topo.user_id, topo.name, topo.description, topo.image, topo.date_publication,  user_topo_reservation.topo_id, "
-				+ "user_topo_reservation.reserved, user_topo_reservation.date_reservation, user_topo_reservation.user_reserved_id "
+    	String sql = "SELECT topo.id, topo.user_id, topo.name, topo.description, topo.image,  user_topo_reservation.topo_id, "
+				+ "user_topo_reservation.reserved, user_topo_reservation.status_reservation,  user_topo_reservation.date_reservation, "
+				+ "user_topo_reservation.user_reserved_id, topo.date_publication "
 				+ "FROM topo, user_topo_reservation "
 				+ "WHERE topo.id = :topo_id "
 				+ "AND topo.id = user_topo_reservation.topo_id;";
@@ -141,7 +175,7 @@ public class TopoDaoImpl  extends AbstractDao implements TopoDao{
         return getNamedParameterJdbcTemplate().query(sql, args, rowMapper);
     }
 
-        public List<Spot> getRelatedSpots(Topo topo) {
+    public List<Spot> getRelatedSpots(Topo topo) {
             String sql = "SELECT spot.name, spot.id FROM spot WHERE spot.topo_id = :topo_id " +
                     "ORDER BY spot.name ASC;";
 
@@ -153,16 +187,16 @@ public class TopoDaoImpl  extends AbstractDao implements TopoDao{
     }
     
     public void updateReservation(Topo topo){
-        String sql = "UPDATE user_topo_reservation SET reserved = :reserved, "+
+        String sql = "UPDATE user_topo_reservation SET reserved = :reserved, status_reservation = :status_reservation, "+
         		"date_reservation = :date_reservation, user_reserved_id = :user_reserved_id "+
         		"WHERE user_topo_reservation.topo_id = :topo_id;";
 
 
         MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue("user_id", topo.getUserId(), Types.INTEGER);
         args.addValue("topo_id", topo.getId(), Types.INTEGER);
         args.addValue("user_reserved_id", topo.getUserReservedId(), Types.INTEGER);
         args.addValue("reserved", topo.getReserved(), Types.BOOLEAN);
+        args.addValue("status_reservation", topo.getStatusReservation(), Types.INTEGER);
         args.addValue("date_reservation", new Date(), Types.TIMESTAMP);
 
         getNamedParameterJdbcTemplate().update(sql, args);

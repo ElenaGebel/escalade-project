@@ -8,6 +8,7 @@ import com.company.model.bean.Topo;
 import java.util.List;
 
 public class SpotManagerImpl extends AbstractManager implements SpotManager{
+
 	
 	public int registerSpot(Spot spot){
 		return getDaoFactory().getSpotDao().registerSpot(spot);

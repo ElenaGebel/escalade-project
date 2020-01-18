@@ -19,7 +19,6 @@ public class CommentRowMapper implements RowMapper<Comment> {
             else if (rs.getMetaData().getColumnName(i).equals("date")) comment.setDate(rs.getTimestamp("date"));
             else if (rs.getMetaData().getColumnName(i).equals("text")) comment.setText(rs.getString("text"));
         }
-
         UserRowMapper userRM = new UserRowMapper();
         comment.setUser(userRM.mapRow(rs, rowNum));
 

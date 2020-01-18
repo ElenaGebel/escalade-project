@@ -5,7 +5,6 @@ import java.util.List;
 import com.company.model.bean.Quotation;
 import com.company.model.bean.Route;
 
-
 public interface RouteDao {
 
     List<Route> listRoutesFromParent(Route route);

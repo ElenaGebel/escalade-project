@@ -36,7 +36,6 @@ public class UserController extends AbstractController{
 	private static final String PASSWORD_PATTERN = 
           "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%!]).{6,20})";
       
-
     @GetMapping("/inscription")
     public String inscription(HttpServletRequest request) {
     	HttpSession session = request.getSession();
@@ -148,11 +147,7 @@ public class UserController extends AbstractController{
     public String updateUser(ModelMap modelMap, RedirectAttributes redirectAttributes, HttpServletRequest request) throws IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        
-        
-        System.out.println("user="+ user.getPassword());
-        System.out.println("request.getParameter(\"last_password\")="+ request.getParameter("last_password"));
-        System.out.println("request.getParameter(\"new_password\")="+ request.getParameter("new_password"));
+
         Reponse reponse;
         
         if(request.getParameter("pseudo").length() < 1) {

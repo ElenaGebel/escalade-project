@@ -11,6 +11,7 @@ public class SectorManagerImpl  extends AbstractManager implements SectorManager
 		return getDaoFactory().getSectorDao().registerSector(sector);
 	}
 	
+	
 	public void deleteSector(Sector sector){
 		getDaoFactory().getSectorDao().deleteSector(sector);
 	}

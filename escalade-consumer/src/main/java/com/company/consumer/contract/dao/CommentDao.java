@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.company.model.bean.Comment;
 
+
 public interface CommentDao {
 	int registerComment(Comment comment);
 	void deleteComment(Comment comment);

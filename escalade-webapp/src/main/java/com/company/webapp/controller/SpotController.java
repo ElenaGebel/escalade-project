@@ -73,8 +73,7 @@ public class SpotController extends AbstractController{
         else
     	    spot.setImage("");
 
-        spotManager.updateSpot(spot);
-        
+        spotManager.updateSpot(spot);       
         
         return "redirect:/spot";
     }

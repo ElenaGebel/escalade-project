@@ -5,8 +5,10 @@ import com.company.business.contract.managers.TopoManager;
 import com.company.business.impl.AbstractManager;
 import com.company.model.bean.Spot;
 import com.company.model.bean.Topo;
+import com.company.model.bean.User;
 
 import java.util.List;
+
 
 public class TopoManagerImpl extends AbstractManager implements TopoManager{
 	
@@ -45,4 +47,13 @@ public class TopoManagerImpl extends AbstractManager implements TopoManager{
 	public void updateReservation(Topo topo){
 		getDaoFactory().getTopoDao().updateReservation(topo);
 	}
+	
+	public List<Topo> getListReservations(User user){
+		return getDaoFactory().getTopoDao().getListReservations(user);
+	}
+	
+	public List<Topo> getListToposForUser(User user){
+		return getDaoFactory().getTopoDao().getListToposForUser(user);
+	}
+	
 }

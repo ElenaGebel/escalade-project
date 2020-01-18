@@ -71,6 +71,7 @@ public class CommentDaoImpl  extends AbstractDao implements CommentDao{
         return getNamedParameterJdbcTemplate().query(sql, args, rowMapper);
     }
 
+    
     public void updateComment(Comment comment) {
         String sql = "UPDATE comment SET text = :text, date = now() WHERE comment.id = :comment_id;";
 

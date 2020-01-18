@@ -87,6 +87,7 @@ public class SpotDaoImpl  extends AbstractDao implements SpotDao{
         return spot;
 	}
 	
+	
     public List<Spot> listForSearch(Spot spot) {
         String sql = "SELECT * FROM spot " +
                 "WHERE (LOWER(name) LIKE LOWER(:text) OR LOWER(description) LIKE LOWER(:text)) " +

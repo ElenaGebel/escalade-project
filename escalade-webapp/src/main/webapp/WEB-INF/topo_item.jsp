@@ -54,14 +54,19 @@
 
         <!-- UserHasTopo CREATE -->
         <c:if test="${!topo.reserved}">
-            <h5>Topo est disponible pour reservation.</h5>
-            <form hidden method="post" action="reserver/${ topo.id }" class="user-topo-add"></form>
-            <button type="button" class="btn btn-warning btn-xs" onclick="$('.user-topo-add').submit();">
-                <span class="glyphicon glyphicon-ok"></span> Reserver
-            </button>
+            <c:if test="${topo.statusReservation == 0}">
+	             <h5>Topo est disponible pour reservation.</h5>
+	            <form hidden method="post" action="reserver/${ topo.id }" class="user-topo-add"></form>
+	            <button type="button" class="btn btn-warning btn-xs" onclick="$('.user-topo-add').submit();">
+	                <span class="glyphicon glyphicon-ok"></span> Reserver
+	            </button>           
+            </c:if>
+            <c:if test="${topo.statusReservation == 2}">
+	            <h5>Topo est en cours de reservation..</h5>
+            </c:if>
         </c:if>
         <c:if test="${ topo.reserved}">
-            <h5>Topo reserve. Date debut de reservation: ${ topo.getReservationDate() }.</h5>
+            <h5>Topo reserve. Date fin de reservation: ${ topo.getReservationEndDate() }.</h5>
 	        <c:if test="${ sessionScope.user.id == topo.userId }">	            
 	            <form hidden method="post" action="unreserver/${ topo.id}" class="user-topo-delete"></form>
 	            <button type="button" class="btn btn-warning btn-xs" onclick="$('.user-topo-delete').submit();">

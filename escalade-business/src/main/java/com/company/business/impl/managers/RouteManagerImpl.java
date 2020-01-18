@@ -9,6 +9,7 @@ import com.company.model.bean.Route;
 
 public class RouteManagerImpl  extends AbstractManager implements RouteManager{
 	
+	
 	public int registerRoute(Route route){
 		return getDaoFactory().getRouteDao().registerRoute(route);
 	}

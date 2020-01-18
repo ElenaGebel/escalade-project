@@ -3,6 +3,7 @@ import java.util.List;
 import com.company.model.bean.Spot;
 import com.company.model.bean.Topo;
 
+
 public interface SpotDao {
 	int registerSpot(Spot spot);
 	void deleteSpot(Spot spot);

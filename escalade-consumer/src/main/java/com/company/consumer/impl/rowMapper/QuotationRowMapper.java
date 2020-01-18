@@ -17,7 +17,6 @@ public class QuotationRowMapper implements RowMapper<Quotation> {
              else if (rs.getMetaData().getColumnName(i).equals("name")) quotation.setName(rs.getString("name"));
 
         }
-
         return quotation;
     }
 }

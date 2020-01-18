@@ -29,7 +29,6 @@ public class SectorDaoImpl extends AbstractDao implements SectorDao {
         	sql = "SELECT * FROM secteur;";
         }
        
-
         RowMapper<Sector> rowMapper = new SectorRowMapper();
 
         return getNamedParameterJdbcTemplate().query(sql, args, rowMapper);

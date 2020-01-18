@@ -30,9 +30,11 @@ public class TopoRowMapper implements RowMapper<Topo>{
 				topo.setReservationDate(rs.getDate("date_reservation"));
 			else if (rs.getMetaData().getColumnName(i).equals("user_reserved_id")) 
 				topo.setUserReservedId(rs.getInt("user_reserved_id"));
+			else if (rs.getMetaData().getColumnName(i).equals("status_reservation")) 
+				topo.setStatusReservation(rs.getInt("status_reservation"));
 		/*	else if(rs.getMetaData().getColumnName(i).equals("date_publication"))
 				topo.setDate(rs.getTimestamp("date_publication"));*/
-
+				
 		}
 		return topo;
 		

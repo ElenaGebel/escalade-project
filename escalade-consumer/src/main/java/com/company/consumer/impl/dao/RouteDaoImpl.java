@@ -28,7 +28,7 @@ public class RouteDaoImpl extends AbstractDao implements RouteDao{
         }else {
         	sql = "SELECT * FROM voie;";
         }
-       
+     
         RowMapper<Route> rowMapper = new RouteRowMapper();
 
         return getNamedParameterJdbcTemplate().query(sql, args, rowMapper);

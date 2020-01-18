@@ -19,7 +19,6 @@ public class SectorRowMapper implements RowMapper<Sector> {
         	else if (rs.getMetaData().getColumnName(i).equals("description")) sector.setDescription(rs.getString("description"));
 
         }
-
         return sector;
     }
 }

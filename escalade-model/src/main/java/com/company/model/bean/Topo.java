@@ -1,6 +1,7 @@
 package com.company.model.bean;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Topo {
@@ -13,6 +14,7 @@ public class Topo {
 	private Date reservationDate;
 	private Date reservationEndDate;
 	private Boolean reserved;
+	private int statusReservation;
 	private int userReservedId; 
 	
 	public String getReservationDate() {
@@ -25,11 +27,30 @@ public class Topo {
 		this.reservationDate = reservationDate;
 	}
 	public String getReservationEndDate() {
-		if (reservationEndDate != null)
-            return new SimpleDateFormat("dd MMMM yyyy").format(reservationEndDate);
-        else
-            return null;
+
+		if (reservationDate != null) {
+			SimpleDateFormat formattedDate = new SimpleDateFormat("dd MMMM yyyy");    
+			Calendar c = Calendar.getInstance(); 
+			c.setTime(reservationDate);
+			c.add(Calendar.DATE, 14); 
+            return (String)(formattedDate.format(c.getTime()));
+		} else
+            return "";
 	}
+	
+	public String statusReservationMessage(Boolean param) {
+		if (statusReservation == 1)
+            return "Topo réservé. Date de fin de réservation " + getReservationEndDate() + ".";
+        else if (statusReservation == 2)
+            return "Demande de réservation en cours.";
+        else if (statusReservation == 2 && param)
+            return "Votre réservation est en cours de traitement.";
+        else if(param)
+        	return "Réservation est refusé.";
+        else 
+        	return "Topo n'est pas réservé.";
+	}
+	
 	public void setReservationEndDate(Date reservationEndDate) {
 		this.reservationEndDate = reservationEndDate;
 	}
@@ -45,6 +66,14 @@ public class Topo {
 	public void setUserReservedId(int userReservedId) {
 		this.userReservedId = userReservedId;
 	}
+	
+	public int getStatusReservation() {
+		return statusReservation;
+	}
+	public void setStatusReservation(int statusReservation) {
+		this.statusReservation = statusReservation;
+	}
+	
 	public int getId() {
 		return id;
 	}

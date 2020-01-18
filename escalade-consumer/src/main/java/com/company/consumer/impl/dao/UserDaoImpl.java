@@ -23,7 +23,8 @@ public class UserDaoImpl extends AbstractDao implements UserDao{
 	
 	public Reponse registerUser(User user) {
 
-	    String sql = "INSERT INTO user_account (pseudo, email, password, role) VALUES (:pseudo, :email, :password, :role);";
+	    String sql = "INSERT INTO user_account (pseudo, email, password, role) "
+	    		+ "VALUES (:pseudo, :email, :password, :role);";
 	    String hashedPass = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
 
         MapSqlParameterSource params = new MapSqlParameterSource();
@@ -32,6 +33,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao{
         params.addValue("password", hashedPass, Types.VARCHAR);
         params.addValue("role", user.getRole(), Types.VARCHAR);
 
+        
         Reponse reponse;
         try {
         	getNamedParameterJdbcTemplate().update(sql, params);

@@ -145,6 +145,7 @@ public class TopoController extends AbstractController{
         return "redirect:/topo/" + topoId;
     }
 
+    
     @PostMapping("/topo/{topoId}/delete")
     public String deleteTopo(@ModelAttribute Topo topo, @PathVariable String topoId, @RequestParam String picture, HttpServletRequest request) {
         topo.setId(Integer.parseInt(topoId));
@@ -212,29 +213,51 @@ public class TopoController extends AbstractController{
     }
 
     @PostMapping("/topo/reserver/{topoId}")
-    public String reserverTopo(@PathVariable String topoId, HttpServletRequest request) {
+    public String askForReservation(@PathVariable String topoId, HttpServletRequest request) {
     	 Topo topo = new Topo();
-
          topo.setUserReservedId(((User) request.getSession().getAttribute("user")).getId());
 
          topo.setId(Integer.parseInt(topoId));
-         topo.setReserved(true);
-         topo.setReservationDate(new Date());
+         topo.setReserved(false);
+         topo.setStatusReservation(2);
+        
          topoManager.updateReservation(topo);
          return "redirect:/topo/" + topoId;
     }
 
-    @PostMapping("/topo/unreserver/{topoId}")
-    public String updateReservation(@PathVariable String topoId, HttpServletRequest request) throws ParseException {
+    @PostMapping("/reservation/cancel")
+    public String cancelReservation(@RequestParam int topoId, @RequestParam int userReservedId, HttpServletRequest request) {  
     	Topo topo = new Topo();
-
-        topo.setUserReservedId(((User) request.getSession().getAttribute("user")).getId());
-
-        topo.setId(Integer.parseInt(topoId));
+    	topo.setId(topoId);
+    	topo.setUserReservedId(userReservedId);
         topo.setReserved(false);
+        topo.setStatusReservation(0);
+        topoManager.updateReservation(topo);
+        return "redirect:/reservation";
+    }
+    
+    @PostMapping("/reservation/accepte")
+    public String accepteReservation(@RequestParam int topoId, @RequestParam int userReservedId, HttpServletRequest request) {
+    	Topo topo = new Topo();
+    	topo.setId(topoId);
+    	topo.setUserReservedId(userReservedId);
+
+        topo.setReserved(true);
+        topo.setStatusReservation(1);
         topo.setReservationDate(new Date());
         topoManager.updateReservation(topo);
-        return "redirect:/topo/" + topoId;
+        return "redirect:/reservation";
+    }
+    
+    @GetMapping("/reservation")
+    public String showReservationList(ModelMap modelMap, HttpServletRequest request) {
+
+        if (request.getSession().getAttribute("user") != null) {
+        	modelMap.addAttribute("topoList", topoManager.getListToposForUser((User) request.getSession().getAttribute("user")));
+        	modelMap.addAttribute("reservationsList", topoManager.getListReservations((User) request.getSession().getAttribute("user")));
+        }
+            
+        return "reservation";
     }
 
 
