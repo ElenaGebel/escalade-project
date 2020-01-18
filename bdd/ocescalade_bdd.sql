@@ -31,35 +31,6 @@ CREATE TABLE public.voie (
 
 ALTER SEQUENCE public.voie_id_seq OWNED BY public.voie.id;
 
-CREATE SEQUENCE public.spot_id_seq;
-
-CREATE TABLE public.spot (
-                id INTEGER NOT NULL DEFAULT nextval('public.spot_id_seq'),
-                image VARCHAR,
-                user_id INTEGER,
-                name VARCHAR NOT NULL,
-                description VARCHAR,
-                topo_id INTEGER,
-                CONSTRAINT spot_pk PRIMARY KEY (id)
-);
-
-
-ALTER SEQUENCE public.spot_id_seq OWNED BY public.spot.id;
-
-CREATE SEQUENCE public.secteur_id_seq;
-
-CREATE TABLE public.secteur (
-                id INTEGER NOT NULL DEFAULT nextval('public.secteur_id_seq'),
-                spot_id INTEGER NOT NULL,
-                name VARCHAR(200) NOT NULL,
-                description VARCHAR,
-                user_id INTEGER NOT NULL,
-                CONSTRAINT secteur_pk PRIMARY KEY (id)
-);
-
-
-ALTER SEQUENCE public.secteur_id_seq OWNED BY public.secteur.id;
-
 CREATE SEQUENCE public.user_account_id_seq;
 
 CREATE TABLE public.user_account (
@@ -74,6 +45,31 @@ CREATE TABLE public.user_account (
 
 
 ALTER SEQUENCE public.user_account_id_seq OWNED BY public.user_account.id;
+
+CREATE TABLE public.spot (
+                id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                image VARCHAR,
+                name VARCHAR NOT NULL,
+                description VARCHAR,
+                topo_id INTEGER,
+                CONSTRAINT spot_pk PRIMARY KEY (id)
+);
+
+
+CREATE SEQUENCE public.secteur_id_seq;
+
+CREATE TABLE public.secteur (
+                id INTEGER NOT NULL DEFAULT nextval('public.secteur_id_seq'),
+                spot_id INTEGER NOT NULL,
+                name VARCHAR(200) NOT NULL,
+                description VARCHAR,
+                user_id INTEGER NOT NULL,
+                CONSTRAINT secteur_pk PRIMARY KEY (id)
+);
+
+
+ALTER SEQUENCE public.secteur_id_seq OWNED BY public.secteur.id;
 
 CREATE SEQUENCE public.topo_id_seq;
 
@@ -97,6 +93,7 @@ CREATE TABLE public.user_topo_reservation (
                 date_reservation TIMESTAMP,
                 user_reserved_id INTEGER,
                 date_fin_reservation TIMESTAMP,
+                status_reservation INTEGER,
                 CONSTRAINT user_topo_reservation_pk PRIMARY KEY (user_id, topo_id)
 );
 
@@ -123,13 +120,6 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.secteur ADD CONSTRAINT spot_secteur_fk
-FOREIGN KEY (spot_id)
-REFERENCES public.spot (id)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
 ALTER TABLE public.comment ADD CONSTRAINT user_comment_fk
 FOREIGN KEY (user_id)
 REFERENCES public.user_account (id)
@@ -147,6 +137,20 @@ NOT DEFERRABLE;
 ALTER TABLE public.topo ADD CONSTRAINT user_topo_fk
 FOREIGN KEY (user_id)
 REFERENCES public.user_account (id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE public.spot ADD CONSTRAINT user_account_spot_fk
+FOREIGN KEY (user_id)
+REFERENCES public.user_account (id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE public.secteur ADD CONSTRAINT spot_secteur_fk
+FOREIGN KEY (spot_id)
+REFERENCES public.spot (id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
